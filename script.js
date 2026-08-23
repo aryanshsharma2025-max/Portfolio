@@ -364,36 +364,36 @@ function escapeHtml(str) {
       siblings: "Aayushman Sharma"
     },
     education: {
-      college: "SSITPM",
+      college: "SSIPMT, Raipur",
       university: "CSVTU",
-      year: "1st Year (2nd Sem)"
+      year: "2nd Year (3rd Sem)"
     },
-    goals: "To become a skilled software developer and secure top placements"
+    goals: "To build robust software systems, verified AI pipelines, and secure top software engineering roles"
   };
 
   // ✅ KNOWLEDGE BASE
   const KB = {
   greeting: ['hello','hi','hey','namaste'],
   about: ['who is aryansh','about you','about aryansh','tell me about you','who are you'],
-  skills: ['skills','programming','languages','what do you know'],
-  projects: ['projects','work','what have you built'],
+  skills: ['skills','programming','languages','what do you know','stack'],
+  projects: ['projects','work','what have you built','portfolio','apps'],
   contact: ['contact','email'],
   phone: ['phone','number'],
   family: ['family','father','mother'],
-  education: ['education','college','study'],
-  goals: ['goal','future']
+  education: ['education','college','study','semester'],
+  goals: ['goal','future','aspiration']
   };
 
   // ✅ ANSWERS
   const ANSWERS = {
     greeting: "Hey 👋 I'm Aryansh's assistant!",
-    about: "Aryansh Sharma is a CSE student from Raipur.He is passionate about software development and AI.He is currently learning DSA and building projects like chatbots and web apps.",
-    skills: "C, Python, C++ and learning DSA.",
-    projects: "Check the projects section below 👇",
+    about: "Aryansh Sharma is a Computer Science Engineering student (3rd Sem) at SSIPMT, CSVTU. He builds verified full-stack architectures, AI pipelines, and cryptographic integrity tools.",
+    skills: "C++, Python, Java, TypeScript, Solidity, C, Spring Boot, FastAPI, MySQL, React, and Data Structures & Algorithms.",
+    projects: "Flagship projects: PrepPath AI (AI readiness platform), ProofChain (decentralized doc verification), Smart Attendance (Spring Boot + MySQL), and Portfolio Website. Check the Projects section below!",
     contact: `Email: ${PERSONAL_DATA.basic.email}`,
     phone: `Phone: ${PERSONAL_DATA.basic.phone}`,
     family: `Father: ${PERSONAL_DATA.family.father}, Mother: ${PERSONAL_DATA.family.mother}`,
-    education: `Studying at ${PERSONAL_DATA.education.college}, ${PERSONAL_DATA.education.university}`,
+    education: `Studying B.Tech CSE (${PERSONAL_DATA.education.year}) at ${PERSONAL_DATA.education.college}, ${PERSONAL_DATA.education.university}`,
     goals: PERSONAL_DATA.goals,
     default: "I didn't understand that 🤔"
   };
