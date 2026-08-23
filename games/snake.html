@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Snake & Ladder — Aryansh Sharma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════════
+   ROOT VARIABLES
+═══════════════════════════════════════════════ */
+:root {
+  --bg:        #060611;
+  --bg-2:      #0c0c1e;
+  --glass:     rgba(14,14,32,0.6);
+  --glass-hi:  rgba(255,255,255,0.04);
+  --border:    rgba(255,255,255,0.07);
+  --border-hi: rgba(120,80,255,0.35);
+  --p1:        #64ffda;   /* cyan */
+  --p2:        #ff6b9d;   /* pink */
+  --accent:    #b48fff;   /* purple */
+  --gold:      #ffd700;
+  --snake:     #ff4e6a;
+  --ladder:    #4eff91;
+  --text:      #e4e4f0;
+  --muted:     #6e6e99;
+  --dim:       #3a3a55;
+  --font-d:    'Syne', sans-serif;
+  --font-m:    'DM Mono', monospace;
+  --ease:      cubic-bezier(0.4,0,0.2,1);
+  --r:         14px;
+  --r-lg:      22px;
+}
+
+/* ═══════════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font-m);
+  min-height:100svh;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+button{font-family:inherit;cursor:pointer;border:none;}
+svg{display:block;}
+
+/* ═══════════════════════════════════════════════
+   ANIMATED BACKGROUND
+═══════════════════════════════════════════════ */
+#stars-canvas{
+  position:fixed;inset:0;z-index:0;
+  pointer-events:none;
+}
+.orbs{
+  position:fixed;inset:0;z-index:0;
+  pointer-events:none;overflow:hidden;
+}
+.orb{
+  position:absolute;border-radius:50%;
+  filter:blur(90px);opacity:0.1;
+  animation:orbDrift 14s ease-in-out infinite;
+}
+.orb-1{width:500px;height:500px;background:radial-gradient(#7c3aed,transparent);top:-100px;right:-100px;animation-delay:0s;}
+.orb-2{width:350px;height:350px;background:radial-gradient(#0ea5e9,transparent);bottom:-80px;left:-80px;animation-delay:5s;}
+.orb-3{width:250px;height:250px;background:radial-gradient(#ec4899,transparent);top:45%;left:45%;animation-delay:10s;}
+@keyframes orbDrift{
+  0%,100%{transform:translate(0,0) scale(1);}
+  50%{transform:translate(15px,-25px) scale(1.08);}
+}
+.noise{
+  position:fixed;inset:0;z-index:1;
+  pointer-events:none;opacity:0.018;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ═══════════════════════════════════════════════
+   PAGE SHELL
+═══════════════════════════════════════════════ */
+.page{
+  position:relative;z-index:10;
+  min-height:100svh;
+  display:flex;flex-direction:column;align-items:center;
+  padding:1.5rem 1rem 4rem;
+}
+
+/* ═══════════════════════════════════════════════
+   BACK BUTTON
+═══════════════════════════════════════════════ */
+.back-btn{
+  align-self:flex-start;
+  display:inline-flex;align-items:center;gap:7px;
+  font-family:var(--font-d);font-size:0.75rem;font-weight:600;
+  letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--muted);border:1px solid var(--border);
+  background:rgba(255,255,255,0.03);
+  padding:7px 16px;border-radius:999px;text-decoration:none;
+  transition:color .3s,border-color .3s,transform .3s;
+  backdrop-filter:blur(12px);margin-bottom:1.5rem;
+}
+.back-btn svg{width:13px;height:13px;transition:transform .3s;}
+.back-btn:hover{color:var(--accent);border-color:var(--border-hi);transform:translateX(-2px);}
+.back-btn:hover svg{transform:translateX(-3px);}
+
+/* ═══════════════════════════════════════════════
+   PAGE TITLE
+═══════════════════════════════════════════════ */
+.page-title{
+  font-family:var(--font-d);font-size:clamp(1.8rem,5vw,2.8rem);
+  font-weight:800;letter-spacing:-0.03em;text-align:center;
+  margin-bottom:0.3rem;
+}
+.page-title em{
+  font-style:italic;color:var(--accent);
+  font-family:'Georgia',serif;font-weight:400;
+}
+.page-eyebrow{
+  font-size:0.68rem;text-transform:uppercase;letter-spacing:0.14em;
+  color:var(--muted);text-align:center;margin-bottom:1.5rem;
+  display:flex;align-items:center;gap:10px;justify-content:center;
+}
+.page-eyebrow::before,.page-eyebrow::after{
+  content:'';flex:1;max-width:60px;height:1px;
+  background:linear-gradient(to right,transparent,var(--dim));
+}
+.page-eyebrow::after{background:linear-gradient(to left,transparent,var(--dim));}
+
+/* ═══════════════════════════════════════════════
+   MAIN LAYOUT
+═══════════════════════════════════════════════ */
+.game-layout{
+  width:100%;max-width:1100px;
+  display:grid;
+  grid-template-columns:260px 1fr 260px;
+  gap:1.25rem;
+  align-items:start;
+}
+
+/* ═══════════════════════════════════════════════
+   GLASS CARD
+═══════════════════════════════════════════════ */
+.glass-card{
+  background:var(--glass);
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  backdrop-filter:blur(28px) saturate(160%);
+  -webkit-backdrop-filter:blur(28px) saturate(160%);
+  box-shadow:0 0 0 1px rgba(120,80,255,0.05),0 20px 50px rgba(0,0,0,0.45),inset 0 1px 0 rgba(255,255,255,0.05);
+  padding:1.25rem;
+  animation:cardIn .6s var(--ease) both;
+}
+@keyframes cardIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;}}
+
+/* ═══════════════════════════════════════════════
+   PLAYER PANEL
+═══════════════════════════════════════════════ */
+.panel-title{
+  font-family:var(--font-d);font-size:0.7rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);
+  margin-bottom:1rem;
+  display:flex;align-items:center;gap:8px;
+}
+.panel-title::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* player card */
+.player-card{
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:1rem;
+  margin-bottom:0.75rem;
+  transition:border-color .4s,box-shadow .4s,background .4s;
+  position:relative;overflow:hidden;
+}
+.player-card.active-p1{
+  border-color:rgba(100,255,218,0.4);
+  box-shadow:0 0 20px rgba(100,255,218,0.1);
+  background:rgba(100,255,218,0.04);
+}
+.player-card.active-p2{
+  border-color:rgba(255,107,157,0.4);
+  box-shadow:0 0 20px rgba(255,107,157,0.1);
+  background:rgba(255,107,157,0.04);
+}
+.player-header{display:flex;align-items:center;gap:10px;margin-bottom:0.75rem;}
+.player-avatar{
+  width:40px;height:40px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;flex-shrink:0;border:2px solid transparent;
+  transition:border-color .3s,box-shadow .3s;
+}
+.player-avatar.p1-color{background:rgba(100,255,218,0.15);border-color:rgba(100,255,218,0.4);}
+.player-avatar.p2-color{background:rgba(255,107,157,0.15);border-color:rgba(255,107,157,0.4);}
+.player-info{flex:1;}
+.player-name{
+  font-family:var(--font-d);font-weight:700;font-size:0.9rem;margin-bottom:2px;
+}
+.player-pos{font-size:0.72rem;color:var(--muted);}
+.player-pos span{color:var(--text);font-weight:500;}
+
+/* Turn indicator */
+.turn-badge{
+  position:absolute;top:10px;right:10px;
+  font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;
+  padding:2px 8px;border-radius:999px;
+  opacity:0;transition:opacity .3s;
+}
+.active-p1 .turn-badge{opacity:1;background:rgba(100,255,218,0.15);color:var(--p1);}
+.active-p2 .turn-badge{opacity:1;background:rgba(255,107,157,0.15);color:var(--p2);}
+
+/* score/history */
+.event-log{
+  max-height:140px;overflow-y:auto;
+  display:flex;flex-direction:column;gap:4px;
+  scrollbar-width:thin;scrollbar-color:var(--dim) transparent;
+}
+.event-log::-webkit-scrollbar{width:3px;}
+.event-log::-webkit-scrollbar-thumb{background:var(--dim);border-radius:2px;}
+.log-entry{
+  font-size:0.7rem;color:var(--muted);
+  padding:5px 8px;border-radius:6px;
+  background:rgba(255,255,255,0.02);
+  border-left:2px solid var(--dim);
+  animation:logIn .3s var(--ease);
+}
+@keyframes logIn{from{opacity:0;transform:translateX(-8px);}}
+.log-entry.ladder-log{border-color:var(--ladder);color:var(--ladder);}
+.log-entry.snake-log{border-color:var(--snake);color:var(--snake);}
+.log-entry.win-log{border-color:var(--gold);color:var(--gold);}
+.log-empty{font-size:0.72rem;color:var(--dim);text-align:center;padding:1rem 0;}
+
+/* ═══════════════════════════════════════════════
+   CONTROLS PANEL (right)
+═══════════════════════════════════════════════ */
+.dice-section{margin-bottom:1.25rem;}
+.dice-wrap{
+  display:flex;justify-content:center;
+  margin-bottom:0.75rem;
+}
+/* SVG dice */
+.dice-svg{
+  width:80px;height:80px;cursor:pointer;
+  filter:drop-shadow(0 0 16px rgba(180,143,255,0.3));
+  transition:transform .15s,filter .3s;
+  user-select:none;
+}
+.dice-svg:hover{filter:drop-shadow(0 0 24px rgba(180,143,255,0.6));}
+.dice-svg.rolling{animation:diceRoll .6s var(--ease);}
+@keyframes diceRoll{
+  0%{transform:rotate(0deg) scale(1);}
+  25%{transform:rotate(90deg) scale(1.2);}
+  50%{transform:rotate(180deg) scale(0.9);}
+  75%{transform:rotate(270deg) scale(1.1);}
+  100%{transform:rotate(360deg) scale(1);}
+}
+
+.btn-roll{
+  width:100%;padding:13px;
+  background:linear-gradient(135deg,rgba(180,143,255,0.85),rgba(100,80,200,0.85));
+  border:1px solid rgba(180,143,255,0.35);
+  border-radius:var(--r);
+  color:#fff;font-family:var(--font-d);font-size:0.9rem;font-weight:700;
+  letter-spacing:0.04em;
+  position:relative;overflow:hidden;
+  transition:transform .25s var(--ease),box-shadow .25s;
+}
+.btn-roll::before{
+  content:'';position:absolute;inset:0;
+  background:rgba(255,255,255,0.1);opacity:0;transition:opacity .2s;
+}
+.btn-roll:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 24px rgba(120,80,220,0.45);}
+.btn-roll:hover:not(:disabled)::before{opacity:1;}
+.btn-roll:active:not(:disabled){transform:scale(0.97);}
+.btn-roll:disabled{opacity:0.4;cursor:not-allowed;}
+
+/* divider */
+.ctrl-divider{
+  height:1px;margin:1rem 0;
+  background:linear-gradient(to right,transparent,var(--border),transparent);
+}
+
+/* toggle buttons */
+.toggle-row{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:0.6rem;
+}
+.toggle-label{font-size:0.75rem;color:var(--muted);}
+.toggle-switch{
+  position:relative;width:42px;height:22px;
+  background:var(--dim);border-radius:999px;
+  border:none;transition:background .3s;flex-shrink:0;
+  cursor:pointer;
+}
+.toggle-switch::after{
+  content:'';position:absolute;top:3px;left:3px;
+  width:16px;height:16px;border-radius:50%;
+  background:#fff;transition:transform .3s,background .3s;
+}
+.toggle-switch.on{background:linear-gradient(135deg,var(--accent),#6040cc);}
+.toggle-switch.on::after{transform:translateX(20px);}
+
+/* avatar selector */
+.avatar-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:6px;
+  margin-bottom:1rem;
+}
+.avatar-opt{
+  padding:8px 6px;border-radius:10px;
+  border:1px solid var(--border);background:rgba(255,255,255,0.02);
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  font-size:0.65rem;color:var(--muted);transition:border-color .3s,background .3s;
+  cursor:pointer;
+}
+.avatar-opt:hover,.avatar-opt.selected{border-color:var(--border-hi);background:rgba(120,80,255,0.08);}
+.avatar-opt span{font-size:1.4rem;}
+
+/* reset */
+.btn-reset{
+  width:100%;padding:9px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);border-radius:var(--r);
+  color:var(--muted);font-family:var(--font-d);font-size:0.78rem;font-weight:600;
+  letter-spacing:0.05em;transition:color .25s,border-color .25s,background .25s;
+}
+.btn-reset:hover{color:var(--text);border-color:rgba(255,255,255,0.2);background:rgba(255,255,255,0.05);}
+
+/* legend */
+.legend{margin-top:1rem;}
+.legend-item{
+  display:flex;align-items:center;gap:8px;
+  font-size:0.7rem;color:var(--muted);margin-bottom:5px;
+}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+/* ═══════════════════════════════════════════════
+   BOARD SECTION
+═══════════════════════════════════════════════ */
+.board-wrap{position:relative;}
+.board-container{
+  position:relative;
+  border-radius:var(--r-lg);
+  overflow:hidden;
+}
+.board-grid{
+  display:grid;
+  grid-template-columns:repeat(10,1fr);
+  gap:2px;
+  background:rgba(255,255,255,0.04);
+  padding:2px;
+  border-radius:var(--r-lg);
+}
+.cell{
+  aspect-ratio:1;border-radius:6px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  position:relative;
+  font-size:clamp(0.5rem,1.2vw,0.62rem);
+  color:var(--dim);
+  font-family:var(--font-m);
+  background:rgba(12,12,30,0.8);
+  transition:background .3s;
+  overflow:hidden;
+}
+.cell:hover{background:rgba(30,30,60,0.9);}
+.cell-num{
+  font-size:0.55rem;font-weight:300;
+  color:var(--dim);position:absolute;
+  bottom:2px;right:4px;
+  line-height:1;
+}
+.cell.even-cell{background:rgba(15,15,35,0.9);}
+.cell.odd-cell{background:rgba(10,10,28,0.9);}
+.cell.snake-head{background:rgba(255,78,106,0.12);border:1px solid rgba(255,78,106,0.25);}
+.cell.snake-tail{background:rgba(255,78,106,0.06);}
+.cell.ladder-bot{background:rgba(78,255,145,0.12);border:1px solid rgba(78,255,145,0.25);}
+.cell.ladder-top{background:rgba(78,255,145,0.06);}
+
+/* ── player tokens on board ── */
+.token{
+  position:absolute;
+  width:clamp(18px,3.2vw,26px);
+  height:clamp(18px,3.2vw,26px);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:clamp(10px,2vw,16px);
+  border:2px solid;
+  z-index:5;
+  transition:top .4s var(--ease),left .4s var(--ease),transform .3s;
+  pointer-events:none;
+  box-shadow:0 2px 12px rgba(0,0,0,0.5);
+  transform-origin:center;
+}
+.token.p1-tok{
+  background:rgba(100,255,218,0.2);
+  border-color:var(--p1);
+  box-shadow:0 0 10px rgba(100,255,218,0.4);
+}
+.token.p2-tok{
+  background:rgba(255,107,157,0.2);
+  border-color:var(--p2);
+  box-shadow:0 0 10px rgba(255,107,157,0.4);
+}
+.token.bounce{animation:tokenBounce .4s var(--ease);}
+@keyframes tokenBounce{
+  0%{transform:scale(1);}50%{transform:scale(1.4);}100%{transform:scale(1);}
+}
+
+/* SVG overlay for snakes & ladders */
+#board-svg{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  pointer-events:none;z-index:2;
+  overflow:visible;
+}
+
+/* ═══════════════════════════════════════════════
+   TOAST NOTIFICATIONS
+═══════════════════════════════════════════════ */
+#toast-container{
+  position:fixed;top:1.5rem;left:50%;
+  transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  z-index:200;pointer-events:none;
+}
+.toast{
+  padding:10px 22px;border-radius:999px;
+  font-family:var(--font-d);font-size:0.82rem;font-weight:600;
+  backdrop-filter:blur(20px);
+  border:1px solid;white-space:nowrap;
+  animation:toastIn .35s var(--ease) both,toastOut .35s var(--ease) 2.2s both;
+}
+.toast.ladder-toast{
+  background:rgba(78,255,145,0.12);border-color:rgba(78,255,145,0.3);
+  color:var(--ladder);box-shadow:0 0 20px rgba(78,255,145,0.2);
+}
+.toast.snake-toast{
+  background:rgba(255,78,106,0.12);border-color:rgba(255,78,106,0.3);
+  color:var(--snake);box-shadow:0 0 20px rgba(255,78,106,0.2);
+}
+.toast.info-toast{
+  background:rgba(180,143,255,0.12);border-color:rgba(180,143,255,0.3);
+  color:var(--accent);box-shadow:0 0 20px rgba(180,143,255,0.15);
+}
+.toast.antigrav-toast{
+  background:rgba(255,200,80,0.12);border-color:rgba(255,200,80,0.3);
+  color:#ffc850;box-shadow:0 0 20px rgba(255,200,80,0.2);
+}
+@keyframes toastIn{from{opacity:0;transform:translateY(-12px) scale(0.9);}to{opacity:1;transform:none;}}
+@keyframes toastOut{from{opacity:1;transform:none;}to{opacity:0;transform:translateY(-8px);}}
+
+/* ═══════════════════════════════════════════════
+   WINNER MODAL
+═══════════════════════════════════════════════ */
+#winner-modal{
+  position:fixed;inset:0;z-index:300;
+  background:rgba(6,6,17,0.85);
+  backdrop-filter:blur(12px);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;
+  transition:opacity .4s var(--ease);
+}
+#winner-modal.show{opacity:1;pointer-events:all;}
+.modal-box{
+  background:rgba(14,14,32,0.95);
+  border:1px solid rgba(255,215,0,0.25);
+  border-radius:var(--r-lg);
+  padding:2.5rem 2rem;
+  text-align:center;max-width:400px;width:90%;
+  box-shadow:0 0 60px rgba(255,215,0,0.12),0 30px 80px rgba(0,0,0,0.6);
+  animation:modalPop .5s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes modalPop{from{opacity:0;transform:scale(0.7);}to{opacity:1;transform:scale(1);}}
+.modal-crown{font-size:4rem;margin-bottom:0.5rem;animation:crownFloat 2s ease-in-out infinite;}
+@keyframes crownFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.modal-title{
+  font-family:var(--font-d);font-size:1.6rem;font-weight:800;
+  letter-spacing:-0.02em;margin-bottom:0.4rem;
+}
+.modal-subtitle{font-size:0.85rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.6;}
+.modal-winner-name{color:var(--gold);}
+.confetti-row{display:flex;justify-content:center;gap:4px;margin-bottom:1.5rem;font-size:1.4rem;}
+.btn-play-again{
+  padding:12px 32px;
+  background:linear-gradient(135deg,rgba(255,215,0,0.2),rgba(255,180,0,0.12));
+  border:1px solid rgba(255,215,0,0.35);
+  border-radius:var(--r);
+  color:var(--gold);
+  font-family:var(--font-d);font-size:0.88rem;font-weight:700;
+  letter-spacing:0.04em;transition:transform .25s,box-shadow .25s;
+}
+.btn-play-again:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,215,0,0.25);}
+
+/* ═══════════════════════════════════════════════
+   ANTI-GRAVITY BADGE
+═══════════════════════════════════════════════ */
+.ag-active-badge{
+  display:none;
+  align-items:center;gap:6px;
+  font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;
+  color:#ffc850;padding:5px 12px;border-radius:999px;
+  background:rgba(255,200,80,0.08);border:1px solid rgba(255,200,80,0.25);
+  margin-top:0.5rem;width:fit-content;
+}
+.ag-active-badge.show{display:flex;}
+.ag-dot{width:6px;height:6px;border-radius:50%;background:#ffc850;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════ */
+@media(max-width:900px){
+  .game-layout{
+    grid-template-columns:1fr;
+    max-width:480px;
+  }
+  .panel-left{order:2;}
+  .panel-center{order:1;}
+  .panel-right{order:3;}
+}
+</style>
+</head>
+<body>
+
+<!-- BACKGROUND -->
+<canvas id="stars-canvas"></canvas>
+<div class="orbs" aria-hidden="true">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+<div class="noise" aria-hidden="true"></div>
+
+<!-- TOAST -->
+<div id="toast-container" aria-live="polite"></div>
+
+<!-- WINNER MODAL -->
+<div id="winner-modal" role="dialog" aria-modal="true" aria-label="Game Over">
+  <div class="modal-box">
+    <div class="modal-crown">👑</div>
+    <h2 class="modal-title">Victory!</h2>
+    <p class="modal-subtitle">
+      <span class="modal-winner-name" id="modal-winner-name">Player 1</span><br/>
+      conquered the board and claimed the throne!
+    </p>
+    <div class="confetti-row">🎊 🎉 🎊 🎉 🎊</div>
+    <button class="btn-play-again" id="btn-play-again">↺ Play Again</button>
+  </div>
+</div>
+
+<!-- PAGE -->
+<main class="page">
+  <a href="index.html" class="back-btn" aria-label="Back to portfolio">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M19 12H5M12 5l-7 7 7 7"/>
+    </svg>
+    Back to Features
+  </a>
+
+  <div class="page-eyebrow">Games · 2 Players</div>
+  <h1 class="page-title">Snake & <em>Ladder</em></h1>
+
+  <div class="game-layout">
+
+    <!-- ── LEFT PANEL: Players ── -->
+    <aside class="glass-card panel-left" style="animation-delay:.1s">
+      <div class="panel-title">Players</div>
+
+      <!-- P1 -->
+      <div class="player-card active-p1" id="p1-card">
+        <span class="turn-badge">Your Turn</span>
+        <div class="player-header">
+          <div class="player-avatar p1-color" id="p1-avatar">🙂</div>
+          <div class="player-info">
+            <div class="player-name" style="color:var(--p1)">Player 1</div>
+            <div class="player-pos">Position: <span id="p1-pos">Start</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P2 -->
+      <div class="player-card" id="p2-card">
+        <span class="turn-badge">Your Turn</span>
+        <div class="player-header">
+          <div class="player-avatar p2-color" id="p2-avatar">😎</div>
+          <div class="player-info">
+            <div class="player-name" style="color:var(--p2)">Player 2</div>
+            <div class="player-pos">Position: <span id="p2-pos">Start</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-title" style="margin-top:1rem">Event Log</div>
+      <div class="event-log" id="event-log">
+        <div class="log-empty" id="log-empty">Roll to start the game…</div>
+      </div>
+
+      <!-- Anti-Gravity active badge -->
+      <div class="ag-active-badge" id="ag-badge">
+        <span class="ag-dot"></span>
+        Anti-Gravity Active
+      </div>
+    </aside>
+
+    <!-- ── CENTER: Board ── -->
+    <section class="glass-card panel-center" style="padding:0.75rem;animation-delay:.05s">
+      <div class="board-container" id="board-container">
+        <div class="board-grid" id="board-grid"></div>
+        <svg id="board-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+        <!-- Player tokens -->
+        <div class="token p1-tok" id="tok-p1" style="display:none"></div>
+        <div class="token p2-tok" id="tok-p2" style="display:none"></div>
+      </div>
+    </section>
+
+    <!-- ── RIGHT PANEL: Controls ── -->
+    <aside class="glass-card panel-right" style="animation-delay:.15s">
+      <div class="panel-title">Roll Dice</div>
+
+      <div class="dice-section">
+        <div class="dice-wrap">
+          <!-- SVG Dice -->
+          <svg class="dice-svg" id="dice-svg" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Dice">
+            <defs>
+              <linearGradient id="dg" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#1a1040"/>
+                <stop offset="100%" stop-color="#0d0820"/>
+              </linearGradient>
+            </defs>
+            <rect width="80" height="80" rx="16" fill="url(#dg)" stroke="rgba(180,143,255,0.4)" stroke-width="1.5"/>
+            <g id="dice-dots"></g>
+          </svg>
+        </div>
+        <button class="btn-roll" id="btn-roll">🎲 Roll Dice</button>
+      </div>
+
+      <div class="ctrl-divider"></div>
+
+      <!-- Toggles -->
+      <div class="panel-title">Settings</div>
+      <div class="toggle-row">
+        <span class="toggle-label">⚡ Anti-Gravity Mode</span>
+        <button class="toggle-switch" id="ag-toggle" role="switch" aria-checked="false" title="Anti-Gravity Mode"></button>
+      </div>
+      <div class="toggle-row">
+        <span class="toggle-label">🔊 Sound (Placeholder)</span>
+        <button class="toggle-switch on" id="sound-toggle" role="switch" aria-checked="true" title="Sound"></button>
+      </div>
+
+      <div class="ctrl-divider"></div>
+
+      <!-- Avatar Picker -->
+      <div class="panel-title">Avatars</div>
+      <div style="font-size:0.68rem;color:var(--muted);margin-bottom:0.5rem;">Player 1 avatar</div>
+      <div class="avatar-grid" id="p1-avatar-grid">
+        <div class="avatar-opt selected" data-emoji="🙂" data-player="1"><span>🙂</span>Default</div>
+        <div class="avatar-opt" data-emoji="🐱" data-player="1"><span>🐱</span>Cat</div>
+        <div class="avatar-opt" data-emoji="🤖" data-player="1"><span>🤖</span>Robot</div>
+        <div class="avatar-opt" data-emoji="👾" data-player="1"><span>👾</span>Alien</div>
+      </div>
+      <div style="font-size:0.68rem;color:var(--muted);margin-bottom:0.5rem;margin-top:0.5rem;">Player 2 avatar</div>
+      <div class="avatar-grid" id="p2-avatar-grid">
+        <div class="avatar-opt selected" data-emoji="😎" data-player="2"><span>😎</span>Cool</div>
+        <div class="avatar-opt" data-emoji="🐼" data-player="2"><span>🐼</span>Panda</div>
+        <div class="avatar-opt" data-emoji="🦊" data-player="2"><span>🦊</span>Fox</div>
+        <div class="avatar-opt" data-emoji="🐙" data-player="2"><span>🐙</span>Octo</div>
+      </div>
+
+      <div class="ctrl-divider"></div>
+      <button class="btn-reset" id="btn-reset">↺ Reset Game</button>
+
+      <!-- Legend -->
+      <div class="legend">
+        <div class="ctrl-divider"></div>
+        <div class="panel-title" style="margin-bottom:0.6rem;">Legend</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--snake)"></div>Snake head (go down)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--ladder)"></div>Ladder base (go up)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--p1)"></div>Player 1</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--p2)"></div>Player 2</div>
+      </div>
+    </aside>
+
+  </div>
+</main>
+
+<script>
+/* ═══════════════════════════════════════════════
+   STARFIELD CANVAS
+═══════════════════════════════════════════════ */
+(function(){
+  const c=document.getElementById('stars-canvas');
+  const ctx=c.getContext('2d');
+  let stars=[];
+  function resize(){c.width=innerWidth;c.height=innerHeight;}
+  function init(){
+    resize();
+    stars=Array.from({length:140},()=>({
+      x:Math.random()*c.width,y:Math.random()*c.height,
+      r:Math.random()*1.5+0.3,
+      op:Math.random(),speed:Math.random()*0.008+0.003,dir:Math.random()>0.5?1:-1
+    }));
+  }
+  function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+    stars.forEach(s=>{
+      s.op+=s.speed*s.dir;
+      if(s.op>=0.8||s.op<=0.05)s.dir*=-1;
+      ctx.beginPath();
+      ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(255,255,255,${s.op.toFixed(2)})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',init);
+  init();draw();
+})();
+
+/* ═══════════════════════════════════════════════
+   GAME CONSTANTS
+═══════════════════════════════════════════════ */
+// Snakes: {head: tail}
+const SNAKES = {
+  99:54, 87:24, 62:19, 56:53, 49:11, 47:26, 16:6
+};
+// Ladders: {base: top}
+const LADDERS = {
+  2:38, 7:14, 8:31, 15:26, 21:42, 28:84, 36:44, 51:67, 71:91, 80:100
+};
+
+/* ═══════════════════════════════════════════════
+   GAME STATE
+═══════════════════════════════════════════════ */
+const state = {
+  positions: [0, 0],     // 0=off-board, 1-100 on board
+  currentPlayer: 0,      // 0 or 1
+  rolling: false,
+  gameOver: false,
+  antiGravity: false,
+  avatars: ['🙂','😎'],
+  diceValue: 1,
+};
+
+/* ═══════════════════════════════════════════════
+   BUILD BOARD
+═══════════════════════════════════════════════ */
+const boardGrid = document.getElementById('board-grid');
+const cells = []; // cells[0]=null, cells[1..100]=DOM element
+
+function buildBoard(){
+  boardGrid.innerHTML='';
+  cells.length=0;
+  cells.push(null); // index 0 unused
+
+  // Render rows top-to-bottom visually: row 9 (top) = 91-100, row 0 (bottom) = 1-10
+  for(let row=9;row>=0;row--){
+    const rowNums=[];
+    for(let col=0;col<10;col++){
+      // row 0 = cells 1-10 (bottom), row 9 = cells 91-100 (top)
+      // Even rows from bottom (0,2,4...) go left-to-right: 1,2,3...
+      // Odd rows from bottom (1,3,5...) go right-to-left: 20,19,18...
+      const num = row%2===0
+        ? row*10+col+1          // left-to-right
+        : row*10+(10-col);      // right-to-left
+      rowNums.push(num);
+    }
+    rowNums.forEach(num=>{
+      const cell=document.createElement('div');
+      cell.className='cell '+(num%2===0?'even-cell':'odd-cell');
+      cell.id=`cell-${num}`;
+      cell.setAttribute('data-num',num);
+
+      // Mark snake/ladder cells
+      if(SNAKES[num])     cell.classList.add('snake-head');
+      if(Object.values(SNAKES).includes(num)) cell.classList.add('snake-tail');
+      if(LADDERS[num])    cell.classList.add('ladder-bot');
+      if(Object.values(LADDERS).includes(num)) cell.classList.add('ladder-top');
+
+      // Cell number
+      const numEl=document.createElement('div');
+      numEl.className='cell-num';
+      numEl.textContent=num;
+      cell.appendChild(numEl);
+
+      boardGrid.appendChild(cell);
+      cells[num]=cell;
+    });
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   DRAW SVG SNAKES & LADDERS
+═══════════════════════════════════════════════ */
+function getCellCenter(num){
+  const cell=cells[num];
+  if(!cell)return{x:0,y:0};
+  const boardRect=boardGrid.getBoundingClientRect();
+  const cellRect=cell.getBoundingClientRect();
+  return{
+    x:cellRect.left-boardRect.left+cellRect.width/2,
+    y:cellRect.top-boardRect.top+cellRect.height/2
+  };
+}
+
+function drawConnectors(){
+  const svg=document.getElementById('board-svg');
+  svg.innerHTML='';
+  const defs=document.createElementNS('http://www.w3.org/2000/svg','defs');
+
+  // Snake gradient
+  const sg=document.createElementNS('http://www.w3.org/2000/svg','linearGradient');
+  sg.id='snakeGrad';sg.setAttribute('gradientUnits','userSpaceOnUse');
+  const ss1=document.createElementNS('http://www.w3.org/2000/svg','stop');
+  ss1.setAttribute('offset','0%');ss1.setAttribute('stop-color','#ff4e6a');
+  const ss2=document.createElementNS('http://www.w3.org/2000/svg','stop');
+  ss2.setAttribute('offset','100%');ss2.setAttribute('stop-color','#ff9f5a');
+  sg.appendChild(ss1);sg.appendChild(ss2);
+  defs.appendChild(sg);
+
+  // Ladder gradient
+  const lg=document.createElementNS('http://www.w3.org/2000/svg','linearGradient');
+  lg.id='ladderGrad';lg.setAttribute('gradientUnits','userSpaceOnUse');
+  const ls1=document.createElementNS('http://www.w3.org/2000/svg','stop');
+  ls1.setAttribute('offset','0%');ls1.setAttribute('stop-color','#4eff91');
+  const ls2=document.createElementNS('http://www.w3.org/2000/svg','stop');
+  ls2.setAttribute('offset','100%');ls2.setAttribute('stop-color','#64ffda');
+  lg.appendChild(ls1);lg.appendChild(ls2);
+  defs.appendChild(lg);
+
+  svg.appendChild(defs);
+
+  // Draw snakes
+  Object.entries(SNAKES).forEach(([head,tail])=>{
+    const h=getCellCenter(+head);
+    const t=getCellCenter(+tail);
+    const mid={x:(h.x+t.x)/2+(h.y>t.y?18:-18),y:(h.y+t.y)/2};
+    const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+    const d=`M${h.x},${h.y} Q${mid.x},${mid.y} ${t.x},${t.y}`;
+    path.setAttribute('d',d);
+    path.setAttribute('stroke','url(#snakeGrad)');
+    path.setAttribute('stroke-width','3');
+    path.setAttribute('fill','none');
+    path.setAttribute('stroke-opacity','0.7');
+    path.setAttribute('stroke-linecap','round');
+    path.setAttribute('stroke-dasharray','6 3');
+    svg.appendChild(path);
+
+    // Snake head circle
+    const circle=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    circle.setAttribute('cx',h.x);circle.setAttribute('cy',h.y);
+    circle.setAttribute('r','5');circle.setAttribute('fill','#ff4e6a');
+    circle.setAttribute('opacity','0.85');
+    svg.appendChild(circle);
+  });
+
+  // Draw ladders
+  Object.entries(LADDERS).forEach(([base,top])=>{
+    const b=getCellCenter(+base);
+    const t=getCellCenter(+top);
+    const angle=Math.atan2(t.y-b.y,t.x-b.x);
+    const perp={x:Math.sin(angle)*5,y:-Math.cos(angle)*5};
+
+    // Left rail
+    const lr=document.createElementNS('http://www.w3.org/2000/svg','line');
+    lr.setAttribute('x1',b.x+perp.x);lr.setAttribute('y1',b.y+perp.y);
+    lr.setAttribute('x2',t.x+perp.x);lr.setAttribute('y2',t.y+perp.y);
+    lr.setAttribute('stroke','url(#ladderGrad)');lr.setAttribute('stroke-width','2.5');
+    lr.setAttribute('stroke-opacity','0.7');lr.setAttribute('stroke-linecap','round');
+    svg.appendChild(lr);
+
+    // Right rail
+    const rr=document.createElementNS('http://www.w3.org/2000/svg','line');
+    rr.setAttribute('x1',b.x-perp.x);rr.setAttribute('y1',b.y-perp.y);
+    rr.setAttribute('x2',t.x-perp.x);rr.setAttribute('y2',t.y-perp.y);
+    rr.setAttribute('stroke','url(#ladderGrad)');rr.setAttribute('stroke-width','2.5');
+    rr.setAttribute('stroke-opacity','0.7');rr.setAttribute('stroke-linecap','round');
+    svg.appendChild(rr);
+
+    // Rungs
+    const dist=Math.hypot(t.x-b.x,t.y-b.y);
+    const steps=Math.floor(dist/16);
+    for(let i=1;i<steps;i++){
+      const frac=i/steps;
+      const rx=b.x+(t.x-b.x)*frac;
+      const ry=b.y+(t.y-b.y)*frac;
+      const rung=document.createElementNS('http://www.w3.org/2000/svg','line');
+      rung.setAttribute('x1',rx+perp.x*1.1);rung.setAttribute('y1',ry+perp.y*1.1);
+      rung.setAttribute('x2',rx-perp.x*1.1);rung.setAttribute('y2',ry-perp.y*1.1);
+      rung.setAttribute('stroke','#4eff91');rung.setAttribute('stroke-width','1.5');
+      rung.setAttribute('stroke-opacity','0.5');
+      svg.appendChild(rung);
+    }
+  });
+}
+
+/* ═══════════════════════════════════════════════
+   TOKEN POSITIONING
+═══════════════════════════════════════════════ */
+function positionToken(playerIdx){
+  const tokId=playerIdx===0?'tok-p1':'tok-p2';
+  const tok=document.getElementById(tokId);
+  const pos=state.positions[playerIdx];
+
+  if(pos===0){tok.style.display='none';return;}
+  tok.style.display='flex';
+
+  const cell=cells[pos];
+  const boardRect=boardGrid.getBoundingClientRect();
+  const containerRect=document.getElementById('board-container').getBoundingClientRect();
+  const cellRect=cell.getBoundingClientRect();
+
+  const cx=cellRect.left-containerRect.left+cellRect.width/2;
+  const cy=cellRect.top-containerRect.top+cellRect.height/2;
+  const offset=playerIdx===0?-8:8;
+
+  tok.style.left=(cx+offset-tok.offsetWidth/2)+'px';
+  tok.style.top=(cy-tok.offsetHeight/2)+'px';
+  tok.textContent=state.avatars[playerIdx];
+
+  tok.classList.remove('bounce');
+  void tok.offsetWidth;
+  tok.classList.add('bounce');
+}
+
+/* ═══════════════════════════════════════════════
+   DICE RENDERING
+═══════════════════════════════════════════════ */
+const DOT_POSITIONS = {
+  1:[[40,40]],
+  2:[[22,22],[58,58]],
+  3:[[22,22],[40,40],[58,58]],
+  4:[[22,22],[58,22],[22,58],[58,58]],
+  5:[[22,22],[58,22],[40,40],[22,58],[58,58]],
+  6:[[22,20],[58,20],[22,40],[58,40],[22,60],[58,60]]
+};
+
+function renderDice(val){
+  const g=document.getElementById('dice-dots');
+  g.innerHTML='';
+  (DOT_POSITIONS[val]||[]).forEach(([cx,cy])=>{
+    const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx',cx);c.setAttribute('cy',cy);c.setAttribute('r','5.5');
+    c.setAttribute('fill','#b48fff');c.setAttribute('opacity','0.9');
+    g.appendChild(c);
+  });
+}
+
+function animateDice(){
+  return new Promise(resolve=>{
+    const svg=document.getElementById('dice-svg');
+    svg.classList.add('rolling');
+    let flashes=0;
+    const interval=setInterval(()=>{
+      renderDice(Math.ceil(Math.random()*6));
+      flashes++;
+      if(flashes>=8){
+        clearInterval(interval);
+        svg.classList.remove('rolling');
+        resolve();
+      }
+    },80);
+  });
+}
+
+/* ═══════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════ */
+function showToast(msg,type='info'){
+  const container=document.getElementById('toast-container');
+  const toast=document.createElement('div');
+  toast.className=`toast ${type}-toast`;
+  toast.textContent=msg;
+  container.appendChild(toast);
+  setTimeout(()=>toast.remove(),2700);
+}
+
+/* ═══════════════════════════════════════════════
+   EVENT LOG
+═══════════════════════════════════════════════ */
+function addLog(msg,type=''){
+  const log=document.getElementById('event-log');
+  const empty=document.getElementById('log-empty');
+  if(empty)empty.remove();
+  const entry=document.createElement('div');
+  entry.className='log-entry '+(type?type+'-log':'');
+  entry.textContent=msg;
+  log.prepend(entry);
+  // Keep max 20 entries
+  while(log.children.length>20)log.removeChild(log.lastChild);
+}
+
+/* ═══════════════════════════════════════════════
+   UI UPDATE
+═══════════════════════════════════════════════ */
+function updateUI(){
+  const p=state.currentPlayer;
+  const p1c=document.getElementById('p1-card');
+  const p2c=document.getElementById('p2-card');
+  p1c.className='player-card '+(p===0?'active-p1':'');
+  p2c.className='player-card '+(p===1?'active-p2':'');
+
+  const pos0=state.positions[0];
+  const pos1=state.positions[1];
+  document.getElementById('p1-pos').textContent=pos0>0?pos0:'Start';
+  document.getElementById('p2-pos').textContent=pos1>0?pos1:'Start';
+
+  positionToken(0);
+  positionToken(1);
+
+  document.getElementById('btn-roll').disabled=state.rolling||state.gameOver;
+}
+
+/* ═══════════════════════════════════════════════
+   MOVE PLAYER (step by step)
+═══════════════════════════════════════════════ */
+async function movePlayer(playerIdx, steps){
+  const isBackward = steps < 0;
+  const absSteps = Math.abs(steps);
+  for(let i=0;i<absSteps;i++){
+    await new Promise(r=>setTimeout(r,120));
+    if(isBackward){
+      state.positions[playerIdx]=Math.max(1,state.positions[playerIdx]-1);
+    } else {
+      state.positions[playerIdx]=Math.min(100,state.positions[playerIdx]+1);
+    }
+    positionToken(playerIdx);
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   SHOW WINNER
+═══════════════════════════════════════════════ */
+function showWinner(playerIdx){
+  state.gameOver=true;
+  const name=`Player ${playerIdx+1}`;
+  document.getElementById('modal-winner-name').textContent=name;
+  document.getElementById('winner-modal').classList.add('show');
+  addLog(`${name} wins the game! 🏆`,'win');
+  showToast(`🏆 ${name} wins!`,'info');
+}
+
+/* ═══════════════════════════════════════════════
+   ROLL LOGIC
+═══════════════════════════════════════════════ */
+async function roll(){
+  if(state.rolling||state.gameOver)return;
+  state.rolling=true;
+  document.getElementById('btn-roll').disabled=true;
+
+  // Animate dice
+  await animateDice();
+
+  // Determine dice value
+  let diceVal=Math.ceil(Math.random()*6);
+
+  // Anti-Gravity: 30% chance to negate roll direction
+  let actualSteps=diceVal;
+  if(state.antiGravity&&Math.random()<0.30){
+    actualSteps=-diceVal;
+    showToast(`⚡ Anti-Gravity! Moving back ${diceVal}!`,'antigrav');
+  }
+
+  renderDice(diceVal);
+  state.diceValue=diceVal;
+
+  const p=state.currentPlayer;
+  const pName=`Player ${p+1}`;
+  addLog(`${pName} rolled ${diceVal}`);
+
+  // Move
+  const oldPos=state.positions[p];
+  let newPos=Math.max(0,Math.min(100,oldPos+actualSteps));
+
+  // First move — must start from 0
+  if(oldPos===0){
+    newPos=Math.min(100,diceVal);
+    if(actualSteps<0)newPos=0; // anti-grav on start, stay
+  }
+
+  if(newPos>100)newPos=100;
+
+  // Animate movement
+  if(newPos!==oldPos){
+    const diff=newPos-oldPos;
+    await movePlayer(p,diff);
+    state.positions[p]=newPos;
+  } else {
+    state.positions[p]=newPos;
+  }
+
+  positionToken(p);
+  updateUI();
+
+  // Check win
+  if(state.positions[p]>=100){
+    state.positions[p]=100;
+    positionToken(p);
+    await new Promise(r=>setTimeout(r,300));
+    showWinner(p);
+    state.rolling=false;
+    return;
+  }
+
+  // Check snake
+  await new Promise(r=>setTimeout(r,350));
+  let effectPos=state.positions[p];
+
+  // Anti-gravity: some snakes might be ladders
+  const snakeAt=SNAKES[effectPos];
+  const ladderAt=LADDERS[effectPos];
+
+  if(snakeAt!==undefined){
+    if(state.antiGravity&&Math.random()<0.4){
+      // Snake becomes a random ladder top instead
+      const ladderTops=Object.values(LADDERS);
+      const randTop=ladderTops[Math.floor(Math.random()*ladderTops.length)];
+      const diff2=randTop-effectPos;
+      await movePlayer(p,diff2);
+      state.positions[p]=randTop;
+      showToast(`🌀 Anti-Gravity! Snake became a portal! +${diff2}`,'antigrav');
+      addLog(`${pName}: Snake reversed! Teleported to ${randTop}!`,'ladder');
+    } else {
+      const diff2=snakeAt-effectPos;
+      await movePlayer(p,diff2);
+      state.positions[p]=snakeAt;
+      showToast(`🐍 Oops! Snake bite! Down to ${snakeAt}`,'snake');
+      addLog(`${pName}: Bitten by snake! ${effectPos}→${snakeAt}`,'snake');
+    }
+  } else if(ladderAt!==undefined){
+    const diff2=ladderAt-effectPos;
+    await movePlayer(p,diff2);
+    state.positions[p]=ladderAt;
+    showToast(`🪜 Climbed a ladder! Up to ${ladderAt}`,'ladder');
+    addLog(`${pName}: Climbed ladder! ${effectPos}→${ladderAt}`,'ladder');
+  }
+
+  positionToken(p);
+  updateUI();
+
+  // Check win again (after snake/ladder)
+  if(state.positions[p]>=100){
+    state.positions[p]=100;
+    positionToken(p);
+    await new Promise(r=>setTimeout(r,300));
+    showWinner(p);
+    state.rolling=false;
+    return;
+  }
+
+  // Switch player
+  state.currentPlayer=p===0?1:0;
+  updateUI();
+  state.rolling=false;
+  document.getElementById('btn-roll').disabled=false;
+}
+
+/* ═══════════════════════════════════════════════
+   RESET
+═══════════════════════════════════════════════ */
+function resetGame(){
+  state.positions=[0,0];
+  state.currentPlayer=0;
+  state.rolling=false;
+  state.gameOver=false;
+  state.diceValue=1;
+  document.getElementById('winner-modal').classList.remove('show');
+  document.getElementById('event-log').innerHTML='<div class="log-empty" id="log-empty">Roll to start the game…</div>';
+  document.getElementById('btn-roll').disabled=false;
+  renderDice(1);
+  updateUI();
+}
+
+/* ═══════════════════════════════════════════════
+   AVATAR PICKER
+═══════════════════════════════════════════════ */
+document.querySelectorAll('.avatar-opt').forEach(opt=>{
+  opt.addEventListener('click',()=>{
+    const player=+opt.dataset.player-1;
+    const emoji=opt.dataset.emoji;
+    state.avatars[player]=emoji;
+    // Deselect others in same grid
+    opt.closest('.avatar-grid').querySelectorAll('.avatar-opt').forEach(o=>o.classList.remove('selected'));
+    opt.classList.add('selected');
+    // Update avatar display
+    const avEl=document.getElementById(player===0?'p1-avatar':'p2-avatar');
+    avEl.textContent=emoji;
+    positionToken(player);
+  });
+});
+
+/* ═══════════════════════════════════════════════
+   ANTI-GRAVITY TOGGLE
+═══════════════════════════════════════════════ */
+document.getElementById('ag-toggle').addEventListener('click',function(){
+  state.antiGravity=!state.antiGravity;
+  this.classList.toggle('on',state.antiGravity);
+  this.setAttribute('aria-checked',state.antiGravity);
+  document.getElementById('ag-badge').classList.toggle('show',state.antiGravity);
+  showToast(state.antiGravity?'⚡ Anti-Gravity Mode ON!':'Anti-Gravity Mode OFF','info');
+});
+
+/* ═══════════════════════════════════════════════
+   SOUND TOGGLE (placeholder)
+═══════════════════════════════════════════════ */
+document.getElementById('sound-toggle').addEventListener('click',function(){
+  this.classList.toggle('on');
+  const on=this.classList.contains('on');
+  this.setAttribute('aria-checked',on);
+});
+
+/* ═══════════════════════════════════════════════
+   EVENT LISTENERS
+═══════════════════════════════════════════════ */
+document.getElementById('btn-roll').addEventListener('click',roll);
+document.getElementById('btn-reset').addEventListener('click',resetGame);
+document.getElementById('btn-play-again').addEventListener('click',resetGame);
+
+/* ═══════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════ */
+buildBoard();
+renderDice(1);
+
+// Draw connectors after layout settles
+function initConnectors(){
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      drawConnectors();
+      updateUI();
+    });
+  });
+}
+window.addEventListener('load',initConnectors);
+window.addEventListener('resize',()=>{
+  drawConnectors();
+  updateUI();
+});
+
+// Redraw on font load
+document.fonts.ready.then(()=>{
+  drawConnectors();
+  updateUI();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Horoscope Finder — Aryansh Sharma</title>
+  <meta name="description" content="Discover your zodiac sign and daily cosmic insights." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── CSS VARIABLES ── */
+    :root {
+      --bg-deep:    #060611;
+      --bg-mid:     #0c0c1e;
+      --surface:    rgba(255,255,255,0.035);
+      --surface-hi: rgba(255,255,255,0.07);
+      --border:     rgba(255,255,255,0.07);
+      --border-hi:  rgba(180,143,255,0.3);
+      --accent:     #b48fff;
+      --accent-2:   #64ffda;
+      --accent-3:   #ff9fd4;
+      --text:       #e4e4f0;
+      --text-muted: #6e6e99;
+      --text-dim:   #3a3a55;
+      --font-d:     'Syne', sans-serif;
+      --font-m:     'DM Mono', monospace;
+      --font-s:     'Instrument Serif', serif;
+      --r:          16px;
+      --r-lg:       24px;
+      --ease:       cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ── RESET ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg-deep);
+      color: var(--text);
+      font-family: var(--font-m);
+      min-height: 100svh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── ANIMATED STARFIELD BACKGROUND ── */
+    .stars-layer {
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none; overflow: hidden;
+    }
+    .star {
+      position: absolute;
+      border-radius: 50%;
+      background: white;
+      animation: starTwinkle var(--d, 3s) ease-in-out infinite var(--delay, 0s);
+    }
+    @keyframes starTwinkle {
+      0%, 100% { opacity: var(--lo, 0.1); transform: scale(1); }
+      50%       { opacity: var(--hi, 0.6); transform: scale(1.4); }
+    }
+
+    /* ── NEBULA ORBS ── */
+    .nebula {
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none;
+    }
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.12;
+      animation: orbDrift 12s ease-in-out infinite;
+    }
+    .orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, #7c3aed, transparent); top: -150px; right: -150px; animation-delay: 0s; }
+    .orb-2 { width: 400px; height: 400px; background: radial-gradient(circle, #0ea5e9, transparent); bottom: -100px; left: -100px; animation-delay: 4s; }
+    .orb-3 { width: 300px; height: 300px; background: radial-gradient(circle, #ec4899, transparent); top: 50%; left: 50%; animation-delay: 8s; }
+    @keyframes orbDrift {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50%       { transform: translate(20px, -30px) scale(1.1); }
+    }
+
+    /* ── NOISE OVERLAY ── */
+    .noise {
+      position: fixed; inset: 0; z-index: 1;
+      pointer-events: none; opacity: 0.02;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ── LAYOUT SHELL ── */
+    .page-shell {
+      position: relative; z-index: 10;
+      min-height: 100svh;
+      display: flex; flex-direction: column;
+      align-items: center;
+      padding: 2rem 1.25rem 4rem;
+    }
+
+    /* ── BACK BUTTON ── */
+    .back-btn {
+      align-self: flex-start;
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--font-d);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      padding: 8px 16px;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: color 0.3s var(--ease), border-color 0.3s var(--ease), background 0.3s var(--ease), transform 0.3s var(--ease);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      margin-bottom: 3rem;
+    }
+    .back-btn svg { width: 14px; height: 14px; transition: transform 0.3s var(--ease); }
+    .back-btn:hover {
+      color: var(--accent);
+      border-color: var(--border-hi);
+      background: rgba(180,143,255,0.06);
+      transform: translateX(-2px);
+    }
+    .back-btn:hover svg { transform: translateX(-3px); }
+
+    /* ── MAIN CARD ── */
+    .card {
+      width: 100%;
+      max-width: 560px;
+      background: rgba(12, 12, 30, 0.55);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: clamp(2rem, 6vw, 3rem);
+      backdrop-filter: blur(30px) saturate(180%);
+      -webkit-backdrop-filter: blur(30px) saturate(180%);
+      box-shadow:
+        0 0 0 1px rgba(180,143,255,0.06),
+        0 24px 64px rgba(0,0,0,0.5),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+      animation: cardIn 0.7s var(--ease) both;
+    }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(32px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ── CARD HEADER ── */
+    .card-eyebrow {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+    }
+    .eyebrow-line {
+      flex: 1; height: 1px;
+      background: linear-gradient(to right, rgba(180,143,255,0.3), transparent);
+    }
+    .eyebrow-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.7)} }
+
+    .card-icon {
+      font-size: 2.8rem;
+      display: block;
+      margin-bottom: 0.75rem;
+      filter: drop-shadow(0 0 16px rgba(180,143,255,0.5));
+      animation: iconFloat 4s ease-in-out infinite;
+    }
+    @keyframes iconFloat {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-6px); }
+    }
+
+    .card-title {
+      font-family: var(--font-d);
+      font-size: clamp(1.7rem, 5vw, 2.2rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.5rem;
+    }
+    .card-title em {
+      font-family: var(--font-s);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--accent);
+    }
+    .card-subtitle {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+      margin: 1.75rem 0;
+    }
+
+    /* ── INPUT AREA ── */
+    .input-label {
+      display: block;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      margin-bottom: 0.6rem;
+    }
+
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .date-input-wrap {
+      position: relative;
+    }
+    .date-input-wrap::before {
+      content: '';
+      position: absolute; inset: 0;
+      border-radius: var(--r);
+      background: linear-gradient(135deg, rgba(180,143,255,0.08), rgba(100,255,218,0.04));
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .date-input-wrap:focus-within::before { opacity: 1; }
+
+    input[type="date"] {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 13px 16px;
+      color: var(--text);
+      font-family: var(--font-m);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
+      appearance: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+    }
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(0.5) sepia(1) saturate(2) hue-rotate(240deg);
+      opacity: 0.6;
+      cursor: pointer;
+    }
+    input[type="date"]:focus {
+      border-color: var(--border-hi);
+      box-shadow: 0 0 0 3px rgba(180,143,255,0.12), 0 0 20px rgba(180,143,255,0.06);
+    }
+    input[type="date"]:hover:not(:focus) { border-color: rgba(255,255,255,0.14); }
+
+    /* ── FIND BUTTON ── */
+    .find-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+      padding: 13px 22px;
+      background: linear-gradient(135deg, rgba(180,143,255,0.9), rgba(130,90,230,0.9));
+      border: 1px solid rgba(180,143,255,0.4);
+      border-radius: var(--r);
+      color: #fff;
+      font-family: var(--font-d);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      white-space: nowrap;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease), opacity 0.25s;
+    }
+    .find-btn::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: rgba(255,255,255,0.1);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .find-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(130,80,220,0.4); }
+    .find-btn:hover::before { opacity: 1; }
+    .find-btn:active { transform: translateY(0) scale(0.97); }
+    .find-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .find-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+    /* ── ERROR ── */
+    .error-msg {
+      display: none;
+      align-items: center; gap: 6px;
+      margin-top: 10px;
+      font-size: 0.78rem;
+      color: #ff6b9d;
+      animation: errorIn 0.3s var(--ease);
+    }
+    .error-msg.show { display: flex; }
+    @keyframes errorIn { from { opacity:0; transform:translateX(-8px); } }
+    .error-msg svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+    /* ── RESULT AREA ── */
+    .result-area {
+      margin-top: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.6s var(--ease), margin-top 0.4s var(--ease);
+    }
+    .result-area.open {
+      max-height: 800px;
+      margin-top: 1.75rem;
+    }
+    .result-inner {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s var(--ease) 0.15s, transform 0.5s var(--ease) 0.15s;
+    }
+    .result-area.open .result-inner {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── ZODIAC RESULT CARD ── */
+    .zodiac-result {
+      background: linear-gradient(135deg,
+        rgba(180,143,255,0.07) 0%,
+        rgba(100,255,218,0.04) 50%,
+        rgba(255,159,212,0.05) 100%);
+      border: 1px solid rgba(180,143,255,0.18);
+      border-radius: var(--r);
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .zodiac-result::before {
+      content: '';
+      position: absolute; top: -40px; right: -40px;
+      width: 120px; height: 120px;
+      background: radial-gradient(circle, rgba(180,143,255,0.15), transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .result-top {
+      display: flex; align-items: flex-start; gap: 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .zodiac-emoji-wrap {
+      flex-shrink: 0;
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 40%, rgba(180,143,255,0.2), rgba(180,143,255,0.05));
+      border: 1px solid rgba(180,143,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.2rem;
+      box-shadow: 0 0 24px rgba(180,143,255,0.15), inset 0 1px 0 rgba(255,255,255,0.08);
+      animation: zodiaczoom 0.5s var(--ease) both;
+    }
+    @keyframes zodiaczoom { from { transform: scale(0.5) rotate(-20deg); opacity:0; } }
+
+    .result-meta { flex: 1; }
+    .result-sign-name {
+      font-family: var(--font-d);
+      font-size: 1.7rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .result-date-range {
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .result-element-row {
+      display: flex; flex-wrap: wrap; gap: 6px;
+    }
+    .badge {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid;
+    }
+    .badge-fire   { color: #ff9f5a; border-color: rgba(255,159,90,0.25); background: rgba(255,159,90,0.08); }
+    .badge-earth  { color: #a8e07d; border-color: rgba(168,224,125,0.25); background: rgba(168,224,125,0.08); }
+    .badge-air    { color: #64d4ff; border-color: rgba(100,212,255,0.25); background: rgba(100,212,255,0.08); }
+    .badge-water  { color: #64b5ff; border-color: rgba(100,181,255,0.25); background: rgba(100,181,255,0.08); }
+    .badge-mutable{ color: #c9a0f0; border-color: rgba(201,160,240,0.25); background: rgba(201,160,240,0.08); }
+    .badge-cardinal{color: #ffd580; border-color: rgba(255,213,128,0.25); background: rgba(255,213,128,0.08); }
+    .badge-fixed  { color: #80e6d6; border-color: rgba(128,230,214,0.25); background: rgba(128,230,214,0.08); }
+
+    .result-desc {
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin-bottom: 1.25rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+    }
+
+    /* ── TRAITS GRID ── */
+    .traits-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 1.25rem;
+    }
+    .trait-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .trait-item:hover { border-color: rgba(180,143,255,0.2); transform: translateY(-1px); }
+    .trait-label {
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      margin-bottom: 3px;
+    }
+    .trait-value {
+      font-family: var(--font-d);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* ── DAILY INSIGHT ── */
+    .daily-insight {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 2px solid var(--accent);
+      border-radius: 0 var(--r) var(--r) 0;
+      padding: 1rem 1.1rem;
+    }
+    .insight-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+    .insight-text {
+      font-size: 0.83rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+      font-style: italic;
+    }
+
+    /* ── COMPATIBILITY ROW ── */
+    .compat-row {
+      display: flex; align-items: center; gap: 8px;
+      margin-top: 1rem; flex-wrap: wrap;
+    }
+    .compat-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+    }
+    .compat-signs { display: flex; gap: 6px; flex-wrap: wrap; }
+    .compat-chip {
+      font-size: 0.72rem;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(100,255,218,0.06);
+      border: 1px solid rgba(100,255,218,0.15);
+      color: var(--accent-2);
+    }
+
+    /* ── RESET / TRY AGAIN ── */
+    .reset-row {
+      display: flex; justify-content: center; margin-top: 1.5rem;
+    }
+    .reset-btn {
+      font-family: var(--font-m);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 16px;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .reset-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+    /* ── FOOTER TAG ── */
+    .card-footer-tag {
+      margin-top: 2.5rem;
+      text-align: center;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-dim);
+    }
+    .card-footer-tag a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 480px) {
+      .input-row { grid-template-columns: 1fr; }
+      .find-btn { width: 100%; }
+      .traits-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Starfield -->
+  <div class="stars-layer" id="stars" aria-hidden="true"></div>
+
+  <!-- Nebula -->
+  <div class="nebula" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- Noise -->
+  <div class="noise" aria-hidden="true"></div>
+
+  <!-- Page -->
+  <main class="page-shell">
+
+    <!-- Back Button -->
+    <a href="index.html" class="back-btn" aria-label="Back to portfolio">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 12H5M12 5l-7 7 7 7"/>
+      </svg>
+      Back to Features
+    </a>
+
+    <!-- Main Card -->
+    <div class="card" role="main">
+
+      <!-- Eyebrow -->
+      <div class="card-eyebrow" aria-hidden="true">
+        <span class="eyebrow-dot"></span>
+        Cosmic Tools · Personal
+        <span class="eyebrow-line"></span>
+      </div>
+
+      <!-- Header -->
+      <span class="card-icon" aria-hidden="true">🔮</span>
+      <h1 class="card-title">
+        Horoscope<br /><em>Finder</em>
+      </h1>
+      <p class="card-subtitle">
+        Enter your birth date to discover your zodiac sign, elemental traits, and a cosmic insight for today.
+      </p>
+
+      <div class="divider" aria-hidden="true"></div>
+
+      <!-- Input Section -->
+      <div>
+        <label class="input-label" for="birthDate">Your birth date</label>
+        <div class="input-row">
+          <div class="date-input-wrap">
+            <input
+              type="date"
+              id="birthDate"
+              name="birthDate"
+              aria-label="Enter your birth date"
+              max=""
+            />
+          </div>
+          <button class="find-btn" id="findBtn" type="button" aria-label="Find my horoscope">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+            Discover
+          </button>
+        </div>
+
+        <!-- Error -->
+        <div class="error-msg" id="errorMsg" role="alert">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <span id="errorText">Please select your birth date first.</span>
+        </div>
+      </div>
+
+      <!-- Result Area -->
+      <div class="result-area" id="resultArea" aria-live="polite">
+        <div class="result-inner" id="resultInner">
+          <!-- Injected by JS -->
+        </div>
+      </div>
+
+      <!-- Footer Tag -->
+      <div class="card-footer-tag">
+        Part of <a href="index.html">Aryansh Sharma's</a> Features Suite
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    /* ── STARFIELD ── */
+    (function buildStars() {
+      const container = document.getElementById('stars');
+      const count = 120;
+      for (let i = 0; i < count; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        const size = Math.random() * 2 + 0.5;
+        const lo = (Math.random() * 0.1 + 0.05).toFixed(2);
+        const hi = (Math.random() * 0.4 + 0.3).toFixed(2);
+        const d  = (Math.random() * 3 + 2).toFixed(1) + 's';
+        const delay = -(Math.random() * 5).toFixed(1) + 's';
+        star.style.cssText = `
+          width:${size}px;height:${size}px;
+          top:${Math.random()*100}%;left:${Math.random()*100}%;
+          --lo:${lo};--hi:${hi};--d:${d};--delay:${delay};
+        `;
+        container.appendChild(star);
+      }
+    })();
+
+    /* ── DATE MAX ── */
+    document.getElementById('birthDate').max = new Date().toISOString().split('T')[0];
+
+    /* ── ZODIAC DATA ── */
+    const ZODIAC = [
+      {
+        name: 'Capricorn', emoji: '♑', symbol: 'Sea-Goat',
+        range: 'Dec 22 – Jan 19',
+        element: 'Earth', quality: 'Cardinal', ruling: 'Saturn',
+        elementBadge: 'badge-earth', qualityBadge: 'badge-cardinal',
+        color: '#a8e07d',
+        desc: 'You are a disciplined, ambitious, and practical soul. Capricorns are natural planners with an extraordinary capacity for patience and long-term vision. Ruled by Saturn, you carry an old wisdom and work ethic that others admire.',
+        traits: { Strengths: 'Disciplined · Ambitious', Weaknesses: 'Stubborn · Reserved', Lucky: '6, 9, 8', Stone: 'Garnet' },
+        compatible: ['Taurus', 'Virgo', 'Scorpio'],
+        insight: [
+          'The mountain ahead is high, but each step upward reveals a wider horizon. Your persistence is your compass.',
+          'Saturn rewards patience. What you plant today in diligence will bloom in its own perfect season.',
+          'Structure is your strength. Let clarity guide where emotions cloud the path forward.',
+        ]
+      },
+      {
+        name: 'Aquarius', emoji: '♒', symbol: 'Water-Bearer',
+        range: 'Jan 20 – Feb 18',
+        element: 'Air', quality: 'Fixed', ruling: 'Uranus',
+        elementBadge: 'badge-air', qualityBadge: 'badge-fixed',
+        color: '#64d4ff',
+        desc: 'A visionary and humanitarian at heart. Aquarians think beyond conventions and carry a fierce love for freedom, innovation, and collective progress. You often feel like you are living in the future.',
+        traits: { Strengths: 'Original · Visionary', Weaknesses: 'Aloof · Detached', Lucky: '4, 7, 11', Stone: 'Amethyst' },
+        compatible: ['Gemini', 'Libra', 'Sagittarius'],
+        insight: [
+          'The ideas that others dismiss today are the blueprints of tomorrow. Trust your unconventional mind.',
+          'Connection is your gift. Let your walls down — the universe conspires in community.',
+          'Change is not chaos. It is the language of progress, and you are fluent in it.',
+        ]
+      },
+      {
+        name: 'Pisces', emoji: '♓', symbol: 'Two Fish',
+        range: 'Feb 19 – Mar 20',
+        element: 'Water', quality: 'Mutable', ruling: 'Neptune',
+        elementBadge: 'badge-water', qualityBadge: 'badge-mutable',
+        color: '#a389ff',
+        desc: 'Deeply intuitive, empathetic, and creative. Pisces live between worlds — the real and the imagined — and carry a profound emotional intelligence that makes you both the dreamer and the healer in any room.',
+        traits: { Strengths: 'Empathetic · Creative', Weaknesses: 'Escapist · Oversensitive', Lucky: '3, 9, 12', Stone: 'Aquamarine' },
+        compatible: ['Cancer', 'Scorpio', 'Taurus'],
+        insight: [
+          'Your sensitivity is not a flaw — it is sonar. You feel what others cannot see.',
+          'Dreams without action are beautiful paintings. Today, pick up a brush.',
+          'The current is strong, but you were born to swim through uncertain waters.',
+        ]
+      },
+      {
+        name: 'Aries', emoji: '♈', symbol: 'Ram',
+        range: 'Mar 21 – Apr 19',
+        element: 'Fire', quality: 'Cardinal', ruling: 'Mars',
+        elementBadge: 'badge-fire', qualityBadge: 'badge-cardinal',
+        color: '#ff7f5a',
+        desc: 'Bold, energetic, and fearlessly pioneering. Aries is the first sign of the zodiac — a natural leader who charges ahead with courage and passion. You thrive on challenge and ignite inspiration in everyone around you.',
+        traits: { Strengths: 'Courageous · Energetic', Weaknesses: 'Impulsive · Short-tempered', Lucky: '1, 8, 17', Stone: 'Diamond' },
+        compatible: ['Leo', 'Sagittarius', 'Gemini'],
+        insight: [
+          'Your fire is your compass. Act with intention today and the universe will match your momentum.',
+          'Courage is not the absence of fear — it is moving forward despite it. You know this well.',
+          'A spark lit in faith can illuminate entire rooms. Be the initiator.',
+        ]
+      },
+      {
+        name: 'Taurus', emoji: '♉', symbol: 'Bull',
+        range: 'Apr 20 – May 20',
+        element: 'Earth', quality: 'Fixed', ruling: 'Venus',
+        elementBadge: 'badge-earth', qualityBadge: 'badge-fixed',
+        color: '#9ecf6b',
+        desc: 'Grounded, sensual, and wonderfully steadfast. Taurus brings beauty and stability to everything they touch. Ruled by Venus, you appreciate the finer things in life and possess an unshakable inner resolve.',
+        traits: { Strengths: 'Reliable · Patient', Weaknesses: 'Possessive · Inflexible', Lucky: '2, 6, 9', Stone: 'Emerald' },
+        compatible: ['Virgo', 'Capricorn', 'Cancer'],
+        insight: [
+          'Roots allow trees to reach the sky. Your stability is not limitation — it is your superpower.',
+          'Beauty surrounds you when you slow down enough to notice it.',
+          'Patience is your strength. The harvest comes to those who tend the soil faithfully.',
+        ]
+      },
+      {
+        name: 'Gemini', emoji: '♊', symbol: 'Twins',
+        range: 'May 21 – Jun 20',
+        element: 'Air', quality: 'Mutable', ruling: 'Mercury',
+        elementBadge: 'badge-air', qualityBadge: 'badge-mutable',
+        color: '#ffdd80',
+        desc: 'Curious, adaptable, and brilliantly communicative. Gemini carries a duality that makes them endlessly fascinating. Ruled by Mercury, you are a natural conversationalist, thinker, and connector of ideas.',
+        traits: { Strengths: 'Witty · Versatile', Weaknesses: 'Inconsistent · Restless', Lucky: '5, 7, 14', Stone: 'Pearl' },
+        compatible: ['Libra', 'Aquarius', 'Aries'],
+        insight: [
+          'Two minds are your gift. Let them collaborate today rather than compete.',
+          'Your words carry weight. Choose them as carefully as you choose your ideas.',
+          'Adaptability is intelligence. You bend so others can follow.',
+        ]
+      },
+      {
+        name: 'Cancer', emoji: '♋', symbol: 'Crab',
+        range: 'Jun 21 – Jul 22',
+        element: 'Water', quality: 'Cardinal', ruling: 'Moon',
+        elementBadge: 'badge-water', qualityBadge: 'badge-cardinal',
+        color: '#85c9ff',
+        desc: 'Deeply nurturing, intuitive, and emotionally intelligent. Cancer is ruled by the Moon and carries a profound connection to home, family, and the tides of human emotion. You are both protector and empath.',
+        traits: { Strengths: 'Nurturing · Intuitive', Weaknesses: 'Moody · Clingy', Lucky: '2, 7, 11', Stone: 'Moonstone' },
+        compatible: ['Scorpio', 'Pisces', 'Taurus'],
+        insight: [
+          'Your heart is your guide. Trust it today — the moon has aligned in your favor.',
+          'Home is wherever you bring your full self. Carry that warmth wherever you go.',
+          'Tenderness is strength. The world needs your kind of courage.',
+        ]
+      },
+      {
+        name: 'Leo', emoji: '♌', symbol: 'Lion',
+        range: 'Jul 23 – Aug 22',
+        element: 'Fire', quality: 'Fixed', ruling: 'Sun',
+        elementBadge: 'badge-fire', qualityBadge: 'badge-fixed',
+        color: '#ffa447',
+        desc: 'Radiant, generous, and naturally charismatic. Leo, ruled by the Sun, was born to shine. You carry a warmth and majesty that draws people toward you, and your loyalty to those you love is unmatched.',
+        traits: { Strengths: 'Generous · Loyal', Weaknesses: 'Arrogant · Dramatic', Lucky: '1, 3, 10', Stone: 'Ruby' },
+        compatible: ['Aries', 'Sagittarius', 'Gemini'],
+        insight: [
+          'The sun does not apologize for shining. Neither should you.',
+          'Your generosity is a light that multiplies when shared freely.',
+          'Lead from love today. Your stage is set, and the world is watching.',
+        ]
+      },
+      {
+        name: 'Virgo', emoji: '♍', symbol: 'Maiden',
+        range: 'Aug 23 – Sep 22',
+        element: 'Earth', quality: 'Mutable', ruling: 'Mercury',
+        elementBadge: 'badge-earth', qualityBadge: 'badge-mutable',
+        color: '#a8d980',
+        desc: 'Analytical, meticulous, and quietly brilliant. Virgo possesses a rare gift for seeing the details that others miss. Ruled by Mercury, you are a natural problem-solver with deep devotion and service in your soul.',
+        traits: { Strengths: 'Analytical · Precise', Weaknesses: 'Perfectionist · Critical', Lucky: '5, 14, 23', Stone: 'Sapphire' },
+        compatible: ['Taurus', 'Capricorn', 'Cancer'],
+        insight: [
+          'The details you tend to today are the foundations others will stand on tomorrow.',
+          'Perfection is a direction, not a destination. You know this more than most.',
+          'Your quiet dedication is a form of profound love. It is noticed.',
+        ]
+      },
+      {
+        name: 'Libra', emoji: '♎', symbol: 'Scales',
+        range: 'Sep 23 – Oct 22',
+        element: 'Air', quality: 'Cardinal', ruling: 'Venus',
+        elementBadge: 'badge-air', qualityBadge: 'badge-cardinal',
+        color: '#f0a0c8',
+        desc: 'Charming, fair-minded, and beautifully balanced. Libra seeks harmony in all things. Ruled by Venus, you are drawn to beauty, justice, and connection. You are the peacemaker the world quietly relies on.',
+        traits: { Strengths: 'Diplomatic · Fair', Weaknesses: 'Indecisive · Pleaser', Lucky: '6, 15, 24', Stone: 'Opal' },
+        compatible: ['Gemini', 'Aquarius', 'Leo'],
+        insight: [
+          'Balance is not stillness — it is a constant, graceful adjustment. You are a master of it.',
+          'Harmony begins within. Tend to your own scales before measuring the world.',
+          'Your eye for beauty is a kind of truth-telling. Trust it.',
+        ]
+      },
+      {
+        name: 'Scorpio', emoji: '♏', symbol: 'Scorpion',
+        range: 'Oct 23 – Nov 21',
+        element: 'Water', quality: 'Fixed', ruling: 'Pluto',
+        elementBadge: 'badge-water', qualityBadge: 'badge-fixed',
+        color: '#9b77ff',
+        desc: 'Intense, transformative, and magnetically powerful. Scorpio sees through surfaces and dives into depths others fear. Ruled by Pluto, you carry the energy of death and rebirth, and you are unafraid of either.',
+        traits: { Strengths: 'Perceptive · Passionate', Weaknesses: 'Jealous · Secretive', Lucky: '8, 11, 18', Stone: 'Topaz' },
+        compatible: ['Cancer', 'Pisces', 'Capricorn'],
+        insight: [
+          'You see what others cannot. Use that vision with compassion today.',
+          'Transformation is your birthright. Whatever must end is clearing space for what is next.',
+          'Your depth is not darkness — it is unfathomable richness. Let someone in.',
+        ]
+      },
+      {
+        name: 'Sagittarius', emoji: '♐', symbol: 'Archer',
+        range: 'Nov 22 – Dec 21',
+        element: 'Fire', quality: 'Mutable', ruling: 'Jupiter',
+        elementBadge: 'badge-fire', qualityBadge: 'badge-mutable',
+        color: '#ffc060',
+        desc: 'Free-spirited, philosophical, and endlessly curious. Sagittarius is the eternal seeker, ruled by Jupiter. You are on a perpetual quest for meaning, wisdom, and adventure — and your enthusiasm is genuinely contagious.',
+        traits: { Strengths: 'Optimistic · Adventurous', Weaknesses: 'Restless · Tactless', Lucky: '3, 7, 9', Stone: 'Turquoise' },
+        compatible: ['Aries', 'Leo', 'Aquarius'],
+        insight: [
+          'The arrow flies truest when released with full intention. Aim high today.',
+          'Wisdom is gathered on the road. Keep moving — the horizon is always worth chasing.',
+          'Your optimism is not naivety — it is a courageous choice. Keep choosing it.',
+        ]
+      },
+    ];
+
+    function getZodiac(day, month) {
+      const dates = [20,19,20,20,21,21,23,23,23,23,22,22];
+      const index  = month === 12 && day >= 22 ? 0 : day >= dates[month - 1] ? month - 1 : month === 1 ? 11 : month - 2;
+      return ZODIAC[((index % 12) + 12) % 12];
+    }
+
+    function pickInsight(sign) {
+      const arr = sign.insight;
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    /* ── RENDER RESULT ── */
+    function renderResult(sign, dateStr) {
+      const insight = pickInsight(sign);
+      const [y, m, d] = dateStr.split('-').map(Number);
+      const dob = new Date(y, m - 1, d);
+      const now = new Date();
+      let age = now.getFullYear() - dob.getFullYear();
+      if (now.getMonth() < dob.getMonth() || (now.getMonth() === dob.getMonth() && now.getDate() < dob.getDate())) age--;
+
+      document.getElementById('resultInner').innerHTML = `
+        <div class="zodiac-result">
+          <div class="result-top">
+            <div class="zodiac-emoji-wrap">${sign.emoji}</div>
+            <div class="result-meta">
+              <div class="result-sign-name">${sign.name}</div>
+              <div class="result-date-range">${sign.range}</div>
+              <div class="result-element-row">
+                <span class="badge ${sign.elementBadge}">${sign.element}</span>
+                <span class="badge ${sign.qualityBadge}">${sign.quality}</span>
+                <span class="badge badge-mutable" style="color:var(--text-muted);border-color:var(--border);background:var(--surface);">${sign.ruling}</span>
+              </div>
+            </div>
+          </div>
+
+          <p class="result-desc">${sign.desc}</p>
+
+          <div class="traits-grid">
+            ${Object.entries(sign.traits).map(([k,v]) => `
+              <div class="trait-item">
+                <div class="trait-label">${k}</div>
+                <div class="trait-value">${v}</div>
+              </div>
+            `).join('')}
+            <div class="trait-item">
+              <div class="trait-label">Symbol</div>
+              <div class="trait-value">${sign.symbol}</div>
+            </div>
+            ${age >= 0 ? `
+            <div class="trait-item">
+              <div class="trait-label">Age</div>
+              <div class="trait-value">${age} years</div>
+            </div>` : ''}
+          </div>
+
+          <div class="daily-insight">
+            <div class="insight-label">✦ Cosmic Insight for Today</div>
+            <div class="insight-text">"${insight}"</div>
+          </div>
+
+          <div class="compat-row">
+            <span class="compat-label">Best with:</span>
+            <div class="compat-signs">
+              ${sign.compatible.map(s => `<span class="compat-chip">${s}</span>`).join('')}
+            </div>
+          </div>
+        </div>
+
+        <div class="reset-row">
+          <button class="reset-btn" id="resetBtn" type="button">↺ Try another date</button>
+        </div>
+      `;
+
+      document.getElementById('resetBtn').addEventListener('click', resetForm);
+    }
+
+    /* ── SHOW / HIDE RESULT ── */
+    const resultArea = document.getElementById('resultArea');
+
+    function showResult(sign, dateStr) {
+      renderResult(sign, dateStr);
+      resultArea.classList.add('open');
+    }
+
+    function resetForm() {
+      resultArea.classList.remove('open');
+      document.getElementById('birthDate').value = '';
+      document.getElementById('errorMsg').classList.remove('show');
+      setTimeout(() => { document.getElementById('resultInner').innerHTML = ''; }, 600);
+    }
+
+    /* ── FIND BUTTON ── */
+    document.getElementById('findBtn').addEventListener('click', () => {
+      const input   = document.getElementById('birthDate');
+      const errorEl = document.getElementById('errorMsg');
+      const errText = document.getElementById('errorText');
+      const val     = input.value;
+
+      errorEl.classList.remove('show');
+
+      if (!val) {
+        errText.textContent = 'Please select your birth date first.';
+        errorEl.classList.add('show');
+        input.focus();
+        return;
+      }
+
+      const [y, m, d] = val.split('-').map(Number);
+      if (y < 1900 || y > new Date().getFullYear()) {
+        errText.textContent = 'Please enter a valid birth year.';
+        errorEl.classList.add('show');
+        return;
+      }
+
+      const sign = getZodiac(d, m);
+      showResult(sign, val);
+    });
+
+    /* ── ENTER KEY ── */
+    document.getElementById('birthDate').addEventListener('keydown', e => {
+      if (e.key === 'Enter') document.getElementById('findBtn').click();
+    });
+  </script>
+
+</body>
+</html>

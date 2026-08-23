@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aryansh Sharma — CS Engineer</title>
+  <meta name="description" content="Portfolio of Aryansh Sharma, Computer Science Engineering student focused on software development and AI." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  
+  
+  
+</head>
+<body>
+
+  <!-- ===== NOISE OVERLAY ===== -->
+  <div class="noise-overlay" aria-hidden="true"></div>
+
+  <!-- ===== CURSOR ===== -->
+  <div class="cursor" id="cursor" aria-hidden="true"></div>
+  <div class="cursor-follower" id="cursorFollower" aria-hidden="true"></div>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-logo">
+      <span class="logo-bracket">&lt;</span>AS<span class="logo-bracket">/&gt;</span>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks" role="list">
+      <li><a href="#hero" class="nav-link">Home</a></li>
+      <li><a href="#about" class="nav-link">About</a></li>
+      <li><a href="#skills" class="nav-link">Skills</a></li>
+      <li><a href="#projects" class="nav-link">Projects</a></li>
+      <li><a href="#achievements" class="nav-link">Achievements</a></li>
+      <li><a href="#contact" class="nav-link">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle dark/light mode">
+        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <span class="visitor-badge" id="visitorBadge" title="Total visitors">👁 <span id="visitorCount">0</span></span>
+    </div>
+  </nav>
+
+  <!-- ===== HERO SECTION ===== -->
+  <section class="hero" id="hero" aria-label="Hero introduction">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="hero-orbs" aria-hidden="true">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-eyebrow reveal-up">
+        <span class="eyebrow-dot"></span>
+        Available for Internships · Raipur, India
+      </div>
+
+      <h1 class="hero-name reveal-up delay-1">
+        Aryansh<br /><em>Sharma</em>
+      </h1>
+
+      <div class="hero-tagline reveal-up delay-2">
+        <span id="typingText"></span><span class="cursor-blink">|</span>
+      </div>
+
+      <p class="hero-intro reveal-up delay-3">
+        CS &amp; Engineering student crafting intelligent systems<br class="desktop-only" />
+        at the intersection of logic, code, and curiosity.
+      </p>
+
+      <div class="hero-cta reveal-up delay-4">
+        <a href="#projects" class="btn btn-primary">
+          <span>View My Work</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#contact" class="btn btn-ghost">Get In Touch</a>
+        <a href="resume.pdf" class="btn btn-outline" download>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Resume
+        </a>
+      </div>
+
+      <div class="hero-stats reveal-up delay-5">
+        <div class="stat">
+          <span class="stat-num" data-target="3">0</span>
+          <span class="stat-label">HackerRank Stars</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat">
+          <span class="stat-num" data-target="2029">0</span>
+          <span class="stat-label">Graduation Year</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat">
+          <span class="stat-num" data-target="1">0</span>
+          <span class="stat-label">Year of Study</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-image-wrap reveal-right">
+      <div class="hero-image-ring" aria-hidden="true"></div>
+      <div class="hero-image-ring ring-2" aria-hidden="true"></div>
+      <img
+        src="images/profile.jpg"
+        alt="Aryansh Sharma"
+        class="hero-img"
+        loading="eager"
+        onerror="this.src='https://ui-avatars.com/api/?name=Aryansh+Sharma&background=0a0a0f&color=64ffda&size=400&bold=true&font-size=0.33'"
+      />
+      <div class="hero-img-glow" aria-hidden="true"></div>
+    </div>
+    <div class="bg-name-loop">
+      <div class="bg-track">
+        <span>Aryansh Sharma • Aryansh Sharma • Aryansh Sharma •</span>
+        <span>Aryansh Sharma • Aryansh Sharma • Aryansh Sharma •</span>
+      </div>
+    </div>
+    <div class="hero-content" data-speed="1"></div>
+    <div class="scroll-indicator" aria-label="Scroll down">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT SECTION ===== -->
+  <section class="section about" id="about" aria-label="About me">
+    <div class="container">
+      <div class="section-header reveal-up">
+        <span class="section-tag">01 / About</span>
+        <h2 class="section-title">The person behind<br /><em>the code</em></h2>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-image-col reveal-left">
+         <div class="about-img-wrap">
+          <img
+             src="images/about.jpg"
+             alt="Aryansh Sharma casual"
+            class="about-img"
+            loading="lazy"
+            onerror="this.src='https://ui-avatars.com/api/?name=AS&background=111118&color=64ffda&size=500'"
+            />
+            <div class="about-img-decoration" aria-hidden="true"></div>
+          </div>
+          <div class="about-location-chip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Raipur, Chhattisgarh, India
+          </div>
+        </div>
+
+        <div class="about-content-col reveal-right">
+          <p class="about-bio">
+            I'm a first-year Computer Science and Engineering student at <strong>Shri Shankaracharya Institute of Technology and Professional Management</strong>, affiliated with CSVTU, graduating in 2029.
+          </p>
+          <p class="about-bio">
+            My journey into code started with curiosity — how do machines think? That question drives me to explore software development, algorithms, and artificial intelligence every single day.
+          </p>
+
+          <div class="about-highlights">
+            <div class="highlight-card">
+              <div class="highlight-icon">🎓</div>
+              <div>
+                <div class="highlight-label">Institution</div>
+                <div class="highlight-value">SSITPM, CSVTU</div>
+              </div>
+            </div>
+            <div class="highlight-card">
+              <div class="highlight-icon">📅</div>
+              <div>
+                <div class="highlight-label">Current Semester</div>
+                <div class="highlight-value">1st Year · 2nd Sem</div>
+              </div>
+            </div>
+            <div class="highlight-card">
+              <div class="highlight-icon">⚙️</div>
+              <div>
+                <div class="highlight-label">Primary Tools</div>
+                <div class="highlight-value">VS Code · Git · HackerRank</div>
+              </div>
+            </div>
+            <div class="highlight-card">
+              <div class="highlight-icon">🎯</div>
+              <div>
+                <div class="highlight-label">Focus</div>
+                <div class="highlight-value">Internships &amp; Placements</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-interests">
+            <span class="interest-tag">Software Development</span>
+            <span class="interest-tag">Artificial Intelligence</span>
+            <span class="interest-tag">Competitive Coding</span>
+            <span class="interest-tag">Problem Solving</span>
+            <span class="interest-tag">System Design</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="journey" id="journey">
+  <div class="container">
+
+    <h2 class="section-title">My Journey 🚆</h2>
+
+    <div class="timeline">
+      <!-- base line -->
+     <div class="timeline-line"></div>
+
+      <!-- glowing progress line -->
+      <div class="timeline-progress" id="timelineProgress"></div>
+
+      <!-- moving train -->
+     <div class="train" id="train">🚆</div>
+
+      <!-- your items below -->
+
+      <div class="timeline-line"></div>
+
+      <!-- Station 1 -->
+      <div class="timeline-item left">
+        <div class="circle"></div>
+        <div class="content">
+          <h3>School</h3>
+        <p>Completed schooling from KRISHNA PUBLIC SCHOOL and developed interest in technology.</p>
+          <img src="images/school.jpg" class="timeline-img">
+        </div>
+      </div>
+
+      <!-- Station 2 -->
+      <div class="timeline-item right">
+        <div class="circle"></div>
+        <div class="content">
+          <h3>Started Coding</h3>
+          <p>Began learning C, Python and programming fundamentals.</p>
+          <img src="images/coding.jpeg" class="timeline-img">
+        </div>
+      </div>
+
+      <!-- Station 3 -->
+      <div class="timeline-item left">
+        <div class="circle"></div>
+        <div class="content">
+          <h3>Hackerrank</h3>
+          <p>Achieved 3⭐ rating in C programming.</p>
+          <img src="images/3star1.png" class="timeline-img">
+        </div>
+      </div>
+
+      <!-- Station 4 -->
+      <div class="timeline-item right">
+        <div class="circle"></div>
+        <div class="content">
+          <h3>IIC Regional Meet</h3>
+          <p>Participated and contributed ideas in innovation meet.</p>
+          <img src="images/iic.jpeg" class="timeline-img">
+        </div>
+      </div>
+
+      <!-- Station 5 -->
+      <div class="timeline-item left">
+        <div class="circle"></div>
+          <div class="content">
+            <h3>Present</h3>
+            <p>CSE student focusing on DSA & development.</p>
+            <img src="images/college.jpg" class="timeline-img">
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SKILLS SECTION ===== -->
+  <section class="section skills" id="skills" aria-label="Technical skills">
+    <div class="container">
+      <div class="section-header reveal-up">
+        <span class="section-tag">02 / Skills</span>
+        <h2 class="section-title">Technical <em>Arsenal</em></h2>
+      </div>
+
+      <div class="skills-grid">
+        <div class="skills-col reveal-left">
+          <h3 class="skills-category-title">
+            <span class="cat-dot"></span> Programming Languages
+          </h3>
+          <div class="skill-bars">
+            <div class="skill-item" data-skill="C" data-percent="60">
+              <div class="skill-meta">
+                <span class="skill-name">C</span>
+                <span class="skill-percent">60%</span>
+              </div>
+              <div class="skill-bar-track">
+                <div class="skill-bar-fill" style="--target: 60%"></div>
+              </div>
+            </div>
+            <div class="skill-item" data-skill="Python" data-percent="40">
+              <div class="skill-meta">
+                <span class="skill-name">Python</span>
+                <span class="skill-percent">40%</span>
+              </div>
+              <div class="skill-bar-track">
+                <div class="skill-bar-fill" style="--target: 40%"></div>
+              </div>
+            </div>
+            <div class="skill-item" data-skill="C++" data-percent="40">
+              <div class="skill-meta">
+                <span class="skill-name">C++</span>
+                <span class="skill-percent">40%</span>
+              </div>
+              <div class="skill-bar-track">
+                <div class="skill-bar-fill" style="--target: 40%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="skills-col reveal-right">
+          <h3 class="skills-category-title">
+            <span class="cat-dot accent2"></span> Tools &amp; Platforms
+          </h3>
+          <div class="tool-grid">
+            <div class="tool-card">
+              <div class="tool-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.15 2.587L18.21.21a1.494 1.494 0 0 0-1.705.29l-9.46 8.63-4.12-3.128a.999.999 0 0 0-1.276.057L.327 7.261A1 1 0 0 0 .326 8.74L3.899 12 .326 15.26a1 1 0 0 0 .001 1.479L1.65 17.94a.999.999 0 0 0 1.276.057l4.12-3.128 9.46 8.63a1.492 1.492 0 0 0 1.704.29l4.942-2.377A1.5 1.5 0 0 0 24 19.848V4.15a1.5 1.5 0 0 0-.85-1.563z"/></svg>
+              </div>
+              <span>VS Code</span>
+            </div>
+            <div class="tool-card">
+              <div class="tool-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              </div>
+              <span>GitHub</span>
+            </div>
+            <div class="tool-card platform">
+              <div class="tool-icon">⭐</div>
+              <span>HackerRank<br /><small>3 Star</small></span>
+            </div>
+            <div class="tool-card platform">
+              <div class="tool-icon">🧩</div>
+              <span>LeetCode<br /><small>Active</small></span>
+            </div>
+          </div>
+
+          <div class="learning-note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            Currently deepening skills in Data Structures &amp; Algorithms
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROJECTS SECTION ===== -->
+  <section class="section projects" id="projects" aria-label="Projects">
+    <div class="container">
+      <div class="section-header reveal-up">
+        <span class="section-tag">03 / Projects</span>
+        <h2 class="section-title">Things I've <em>Built</em></h2>
+      </div>
+
+      <div class="github-repos-note reveal-up">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        <span id="repoStatus">Fetching GitHub repositories...</span>
+      </div>
+
+      <div class="projects-grid" id="projectsGrid">
+        <!-- Static fallback projects (shown until GitHub loads) -->
+        <article class="project-card reveal-up" data-delay="0">
+          <div class="project-img-wrap">
+            <img src="images/project1.png" alt="Project 1" class="project-img" loading="lazy"
+              onerror="this.parentElement.classList.add('no-img')" />
+            <div class="project-img-overlay" aria-hidden="true">
+              <span class="project-tag-badge">C</span>
+            </div>
+          </div>
+          <div class="project-body">
+            <h3 class="project-title">Student Grade Calculator</h3>
+            <p class="project-desc">A command-line grade management system that calculates GPA, tracks subject scores, and generates performance reports. Built to practice C fundamentals and file I/O.</p>
+            <div class="project-stack">
+              <span class="stack-tag">C</span>
+              <span class="stack-tag">File I/O</span>
+              <span class="stack-tag">CLI</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/aryanshsharma2025-max" target="_blank" rel="noopener noreferrer" class="project-link-btn" aria-label="View on GitHub">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                View Code
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card reveal-up" data-delay="100">
+          <div class="project-img-wrap">
+            <img src="images/project2.png" alt="Project 2" class="project-img" loading="lazy"
+              onerror="this.parentElement.classList.add('no-img')" />
+            <div class="project-img-overlay" aria-hidden="true">
+              <span class="project-tag-badge">Python</span>
+            </div>
+          </div>
+          <div class="project-body">
+            <h3 class="project-title">Basic AI Chatbot</h3>
+            <p class="project-desc">A rule-based Python chatbot using NLP basics and pattern matching. Responds to common queries about programming, weather (simulated), and general trivia. Exploring AI fundamentals step by step.</p>
+            <div class="project-stack">
+              <span class="stack-tag">Python</span>
+              <span class="stack-tag">NLP</span>
+              <span class="stack-tag">Pattern Matching</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/aryanshsharma2025-max" target="_blank" rel="noopener noreferrer" class="project-link-btn" aria-label="View on GitHub">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                View Code
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card reveal-up" data-delay="200">
+          <div class="project-img-wrap">
+            <img src="images/project3.png" alt="Project 3" class="project-img" loading="lazy"
+              onerror="this.parentElement.classList.add('no-img')" />
+            <div class="project-img-overlay" aria-hidden="true">
+              <span class="project-tag-badge">C++</span>
+            </div>
+          </div>
+          <div class="project-body">
+            <h3 class="project-title">DSA Visualizer (WIP)</h3>
+            <p class="project-desc">An in-progress console-based visualizer for common data structures — linked lists, stacks, queues. Helps visualize pointer manipulation and memory layout while learning DSA concepts.</p>
+            <div class="project-stack">
+              <span class="stack-tag">C++</span>
+              <span class="stack-tag">DSA</span>
+              <span class="stack-tag">Algorithms</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/aryanshsharma2025-max" target="_blank" rel="noopener noreferrer" class="project-link-btn" aria-label="View on GitHub">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                View Code
+              </a>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="github-dynamic" id="githubDynamic"></div>
+    </div>
+    <section class="features-entry">
+  <div class="container">
+
+    <h2>Explore More 🚀</h2>
+    <p>Discover additional tools, games, and personal features built by me.</p>
+
+    <a href="features.html" class="features-btn">
+      Open Features →
+    </a>
+
+  </div>
+
+  </section>
+
+  <!-- ===== ACHIEVEMENTS SECTION ===== -->
+  <section class="section achievements" id="achievements" aria-label="Achievements and Experience">
+    <div class="container">
+      <div class="section-header reveal-up">
+        <span class="section-tag">04 / Achievements</span>
+        <h2 class="section-title">Milestones &amp; <em>Recognition</em></h2>
+      </div>
+
+      <div class="achievements-grid">
+        <div class="achievement-card featured reveal-up" data-delay="0">
+          <div class="achievement-glow" aria-hidden="true"></div>
+          <div class="achievement-icon-wrap">
+            <span class="achievement-icon">⭐⭐⭐</span>
+          </div>
+          <div class="achievement-body">
+            <span class="achievement-org">HackerRank</span>
+            <h3 class="achievement-title">3-Star Coder</h3>
+            <p class="achievement-desc">Earned 3-star rating on HackerRank through consistent problem solving in C and algorithmic challenges.</p>
+            <a href="https://www.hackerrank.com/profile/aryansh_sharma22" target="_blank" rel="noopener noreferrer" class="achievement-link">
+              View Profile →
+            </a>
+          </div>
+        </div>
+
+        <div class="achievement-card reveal-up" data-delay="100">
+          <div class="achievement-icon-wrap">
+            <span class="achievement-icon">🏛️</span>
+          </div>
+          <div class="achievement-body">
+            <span class="achievement-org">IIC</span>
+            <h3 class="achievement-title">IIC Regional Meet</h3>
+            <p class="achievement-desc">Participated in the Institution Innovation Council regional meet, contributing ideas on technology-driven innovation and student entrepreneurship.</p>
+            <a href="https://www.linkedin.com/feed/update/urn:li:activity:7414310584587968512/" 
+              target="_blank" 
+              class="linkedin-btn">
+              View LinkedIn Post →
+            </a>
+          </div>
+        </div>
+
+        <div class="achievement-card reveal-up" data-delay="200">
+          <div class="achievement-icon-wrap">
+            <span class="achievement-icon">🧩</span>
+          </div>
+          <div class="achievement-body">
+            <span class="achievement-org">LeetCode</span>
+            <h3 class="achievement-title">Active Competitive Coder</h3>
+            <p class="achievement-desc">Regularly solving algorithmic challenges on LeetCode, focusing on data structures, logic building, and time complexity optimization.</p>
+            <a href="https://leetcode.com" target="_blank" rel="noopener noreferrer" class="achievement-link">
+              View Profile →
+            </a>
+          </div>
+        </div>
+
+        <div class="achievement-card reveal-up" data-delay="300">
+          <div class="achievement-icon-wrap">
+            <span class="achievement-icon">🎓</span>
+          </div>
+          <div class="achievement-body">
+            <span class="achievement-org">SSITPM · CSVTU</span>
+            <h3 class="achievement-title">Engineering Enrolled</h3>
+            <p class="achievement-desc">Pursuing B.E. in Computer Science & Engineering from Shri Shankaracharya Institute of Technology, class of 2029.</p>
+            <a href="https://www.ssipmt.edu.in/index.php" 
+              target="_blank" 
+              class="SSIPMT-btn">
+              View SSIPMT COLLEGE →
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT SECTION ===== -->
+  <section class="section contact" id="contact" aria-label="Contact">
+    <div class="container">
+      <div class="section-header reveal-up">
+        <span class="section-tag">05 / Contact</span>
+        <h2 class="section-title">Let's <em>Connect</em></h2>
+        <p class="section-sub">Open for internship opportunities, collaborations, and interesting conversations.</p>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-form-col reveal-left">
+          <form class="contact-form" id="contactForm" novalidate>
+            <div class="form-group">
+              <label for="contactName">Your Name</label>
+              <input type="text" id="contactName" name="name" placeholder="John Doe" autocomplete="name" required />
+            </div>
+            <div class="form-group">
+              <label for="contactEmail">Email Address</label>
+              <input type="email" id="contactEmail" name="email" placeholder="john@example.com" autocomplete="email" required />
+            </div>
+            <div class="form-group">
+              <label for="contactMsg">Message</label>
+              <textarea id="contactMsg" name="message" rows="5" placeholder="Tell me about the opportunity..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary form-submit">
+              <span>Send Message</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+            <p class="form-note" id="formNote" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+
+        <div class="contact-info-col reveal-right">
+          <div class="contact-direct">
+            <h3>Reach me directly</h3>
+            <a href="mailto:aryanshsharma2005@gmail.com" class="contact-email-link">
+              aryanshsharma2005@gmail.com
+            </a>
+          </div>
+
+          <div class="social-links">
+            <a href="https://github.com/aryanshsharma2025-max" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              <span>GitHub</span>
+            </a>
+            <a href="https://www.linkedin.com/in/aryansh-sharma-b17a05396/" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              <span>LinkedIn</span>
+            </a>
+            <a href="https://www.hackerrank.com/profile/aryansh_sharma22" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="HackerRank">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c1.285 0 9.75 4.886 10.392 6 .645 1.115.645 10.885 0 12S13.287 24 12 24s-9.75-4.886-10.392-6c-.645-1.115-.645-10.885 0-12C2.25 4.886 10.715 0 12 0zm2.295 6.799c-.141 0-.254.094-.254.23v4.054H9.92V6.93a.228.228 0 0 0-.257-.228c-.619.094-1.246.455-1.698.9C7.172 8.4 7 9.43 7 9.904V14.3c0 .24.224.454.478.394.927-.2 1.524-.84 1.524-1.78v-2.5h4.12V13c0 .866.595 1.514 1.558 1.7a.22.22 0 0 0 .264-.22V7.03c0-.133-.11-.23-.248-.23a3.45 3.45 0 0 0-.4.0z"/></svg>
+              <span>HackerRank</span>
+            </a>
+          </div>
+
+          <div class="contact-resume-cta">
+            <p>Want a quick overview?</p>
+            <a href="resume.pdf" class="btn btn-outline" download>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download Resume
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-logo"><span class="logo-bracket">&lt;</span>AS<span class="logo-bracket">/&gt;</span></span>
+        <p class="footer-copy">© 2025 Aryansh Sharma · Crafted with curiosity &amp; code</p>
+        <a href="#hero" class="back-to-top" aria-label="Back to top">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== AI CHATBOT ===== -->
+  <div class="chatbot-wrapper" id="chatbotWrapper" aria-label="AI Chatbot">
+    <button class="chatbot-toggle" id="chatbotToggle" aria-label="Open chatbot" aria-expanded="false">
+      <span class="chat-icon">💬</span>
+      <span class="close-icon">✕</span>
+      <span class="chat-pulse" aria-hidden="true"></span>
+    </button>
+
+    <div class="chatbot-window" id="chatbotWindow" role="dialog" aria-modal="true" aria-label="Chat with Aryansh's AI assistant">
+      <div class="chatbot-header">
+        <div class="bot-avatar" aria-hidden="true">🤖</div>
+        <div>
+          <div class="bot-name">Aryansh's Assistant</div>
+          <div class="bot-status">
+            <span class="status-dot" aria-hidden="true"></span> Online
+          </div>
+        </div>
+        <button class="chatbot-close-btn" id="chatbotClose" aria-label="Close chatbot">✕</button>
+      </div>
+      <div class="chatbot-messages" id="chatMessages" role="log" aria-live="polite">
+        <!-- Messages injected by JS -->
+      </div>
+      <div class="chatbot-quick-replies" id="quickReplies">
+        <button class="qr-btn" data-query="who are you">Who are you?</button>
+        <button class="qr-btn" data-query="skills">Skills</button>
+        <button class="qr-btn" data-query="projects">Projects</button>
+        <button class="qr-btn" data-query="contact">Contact</button>
+        <button class="qr-btn" data-query="education">Education</button>
+      </div>
+      <div class="chatbot-input-wrap">
+        <input type="text" id="chatInput" placeholder="Ask me anything..." autocomplete="off" aria-label="Chat input" />
+        <button id="chatSend" aria-label="Send message">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <canvas id="cursor-canvas"></canvas>
+</body>
+</html>
