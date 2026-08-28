@@ -1,6 +1,12 @@
-﻿# OS generated files
+# Environment & Secrets
+.env
+.env.*
+!.env.example
+
+# OS generated files
 .DS_Store
 Thumbs.db
+desktop.ini
 
 # Editor directories and files
 .idea/
@@ -10,8 +16,13 @@ Thumbs.db
 *.njsproj
 *.sln
 *.sw?
+*.swp
+*.swo
 
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
+# Dependencies & build
+node_modules/
+dist/
+build/
+
+# Logs
+*.log
