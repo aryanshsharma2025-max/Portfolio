@@ -1,70 +1,76 @@
-# Aryansh Sharma — Portfolio Website
+# Personal Developer Portfolio
 
-## 📁 Folder Structure
+An interactive, responsive personal developer portfolio showcasing software engineering projects, academic coursework, and programming achievements. Built with semantic HTML5, modern CSS3, and vanilla JavaScript without heavy frontend framework overhead.
+
+---
+
+## 🎨 Visual Identity & Architecture
+
+- **Typography**: Paired display fonts including **Syne** (geometric sans-serif for headings), **DM Mono** (code and metadata tags), and **Instrument Serif** (editorial accents).
+- **Theme Engine**: Built-in Dark and Light mode system powered by CSS custom properties and persisted across browser sessions via `localStorage`.
+- **Micro-Interactions**: Custom trailing cursor with magnetic scaling, scroll-triggered reveal animations, dynamic stat counters, and 3D perspective hover cards.
+- **Zero-Dependency Core**: Pure vanilla web standards—zero build pipelines, zero package managers, and zero runtime overhead.
+
+---
+
+## 🚀 Key Features
+
+| Feature | Implementation Details |
+|---|---|
+| **Theme Toggle** | Seamless dark/light theme switching with CSS variables and `data-theme` state |
+| **Interactive Cursor** | Dual-element cursor follower with smooth interpolation and element snapping |
+| **Project Showcase** | Categorized project cards with interactive 3D tilt effects and direct repository links |
+| **GitHub Integration** | Dynamic fetching of public repositories and live profile metrics via GitHub REST API |
+| **Visitor Counter** | Client-side persistent counter tracking site engagement using browser storage |
+| **Responsive Layout** | Mobile-first layout designed with CSS Grid, Flexbox, and fluid typography clamps |
+
+---
+
+## 📁 Repository Structure
+
 ```
-portfolio/
-├── index.html          ← Main HTML file
-├── style.css           ← All styles (dark/light theme, responsive)
-├── script.js           ← All interactivity & features
-├── resume.pdf          ← YOUR RESUME (replace resume.txt with this)
-├── images/
-│   ├── profile.jpg     ← Hero section profile photo
-│   ├── about.jpg       ← About section photo (can be same)
-│   ├── project1.png    ← Project 1 screenshot
-│   ├── project2.png    ← Project 2 screenshot
-│   └── project3.png    ← Project 3 screenshot
-└── README.md
+Portfolio/
+├── index.html          # Semantic HTML5 layout and section structure
+├── style.css           # Design tokens, CSS variables, dark/light themes, animations
+├── script.js           # DOM manipulation, theme persistence, interactive handlers
+├── features.html       # Feature preview showcase
+├── images/             # Visual assets, avatars, and project previews
+├── games/              # Interactive browser mini-games
+└── README.md           # Project documentation
 ```
 
-## 🚀 How to Run Locally
-1. Download the entire `portfolio/` folder
-2. Add your photos to the `images/` folder (see names above)
-3. Add your `resume.pdf` (rename/replace `resume.txt`)
-4. Open `index.html` in any modern browser (Chrome, Firefox, Edge, Safari)
-5. That's it! No build tools or server needed.
+---
 
-## ✏️ How to Edit Content
-- **Personal info, bio, skills**: Edit `index.html` directly (well-commented sections)
-- **Colors / fonts**: Edit CSS variables at the top of `style.css` (`:root` block)
-- **Chatbot answers**: Edit the `ANSWERS` object in `script.js` (clearly labelled)
-- **Add new projects**: Copy an `<article class="project-card">` block in `index.html`
+## 💻 Running Locally
 
-## 🌐 How to Deploy (Free)
-### GitHub Pages
-1. Push the folder to a GitHub repo
-2. Go to Settings → Pages → Deploy from main branch
-3. Your site is live at `https://yourusername.github.io/repo-name`
+Because this project is built entirely on native web standards, no compilation or bundler is required:
 
-### Netlify (Drag & Drop)
-1. Go to netlify.com → drag the `portfolio/` folder onto the deploy area
-2. Live in 30 seconds!
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/aryanshsharma2025-max/Portfolio.git
+   cd Portfolio
+   ```
 
-## ✅ Features Included
-- [x] Dark/Light theme toggle (persisted in localStorage)
-- [x] Custom cursor with interactive scaling
-- [x] Animated typing effect (5 rotating phrases)
-- [x] Scroll reveal animations
-- [x] Count-up stat animations
-- [x] Animated skill progress bars
-- [x] GitHub API integration (live repos)
-- [x] AI Chatbot with knowledge base
-- [x] Quick-reply chat buttons
-- [x] Project card 3D tilt on hover
-- [x] Visitor counter (localStorage)
-- [x] Contact form UI with validation
-- [x] Fully mobile-responsive (mobile-first)
-- [x] Accessible (ARIA labels, semantic HTML)
-- [x] No build tools — pure HTML/CSS/JS
+2. **Open in browser**:
+   - Double-click `index.html` to open directly in any modern web browser (Chrome, Firefox, Safari, Edge).
+   - Alternatively, serve locally using Python:
+     ```bash
+     python -m http.server 3000
+     ```
+     Navigate to `http://localhost:3000`.
 
-## 🖼️ Image Tips
-- Profile photo: use `IMG_20250218_104418-1.jpg` renamed to `profile.jpg` and `about.jpg`
-- Minimum recommended size: 800×1000px for profile
-- Format: JPG or PNG, keep under 500KB for fast loading
-- If images are missing, the site shows a generated avatar automatically
+---
 
-## 📞 Links to Update
-Search `index.html` for these and update if needed:
-- GitHub: `aryanshsharma2025-max`
-- LinkedIn: `aryansh-sharma-b17a05396`
-- HackerRank: `aryansh_sharma22`
-- Email: `aryanshsharma2005@gmail.com`
+## 🌐 Deployment (GitHub Pages)
+
+To publish via GitHub Pages:
+1. Navigate to **Settings** → **Pages** in the repository.
+2. Under **Build and deployment**, select **Deploy from a branch**.
+3. Set the branch to `main` and folder to `/ (root)`.
+4. Click **Save**. The site will deploy at `https://aryanshsharma2025-max.github.io/Portfolio/`.
+
+---
+
+## 📄 License & Attribution
+
+Designed and developed by **Aryansh Sharma**. Released under the MIT License.
