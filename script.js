@@ -113,11 +113,11 @@
   if (!el) return;
 
   const phrases = [
-    'Software Developer in the Making',
-    'Artificial Intelligence Enthusiast',
-    'Competitive Programmer',
-    'Problem Solver & Builder',
-    'CS Engineering Student · CSVTU',
+    'SIH 2026 Innovator · NashaPrahari',
+    'Modern C++ & LeetCode Problem Solver',
+    'Full-Stack & Systems Developer',
+    'Spring Boot 3, FastAPI & React 19',
+    'CS Engineering Student · SSIPMT Raipur',
   ];
 
   let phraseIdx = 0, charIdx = 0, deleting = false;
@@ -185,6 +185,7 @@
       if (entry.isIntersecting) {
         const el = entry.target;
         const target = parseInt(el.dataset.target);
+        const suffix = el.dataset.suffix || '';
         const duration = 1200;
         const start = performance.now();
 
@@ -192,9 +193,9 @@
           const elapsed = now - start;
           const progress = Math.min(elapsed / duration, 1);
           const ease = 1 - Math.pow(1 - progress, 3);
-          el.textContent = Math.floor(ease * target);
+          el.textContent = Math.floor(ease * target) + suffix;
           if (progress < 1) requestAnimationFrame(update);
-          else el.textContent = target;
+          else el.textContent = target + suffix;
         }
         requestAnimationFrame(update);
         observer.unobserve(el);
@@ -356,7 +357,7 @@ function escapeHtml(str) {
       name: "Aryansh Sharma",
       phone: "XXXXXXXXXX",
       email: "aryanshsharma2005@gmail.com",
-      location: "Raipur, Chhattisgarh"
+      location: "Raipur, Chhattisgarh, India"
     },
     family: {
       father: "Kailash Sharma",
@@ -366,36 +367,41 @@ function escapeHtml(str) {
     education: {
       college: "SSIPMT, Raipur",
       university: "CSVTU",
-      year: "2nd Year (3rd Sem)"
+      year: "2nd Year (3rd Sem)",
+      degree: "B.Tech Computer Science & Engineering"
     },
-    goals: "To build robust software systems, verified AI pipelines, and secure top software engineering roles"
+    goals: "Building resilient full-stack systems, winning Smart India Hackathon (SIH 2026), mastering DSA on LeetCode, and securing premier software engineering roles"
   };
 
   // ✅ KNOWLEDGE BASE
   const KB = {
-  greeting: ['hello','hi','hey','namaste'],
-  about: ['who is aryansh','about you','about aryansh','tell me about you','who are you'],
-  skills: ['skills','programming','languages','what do you know','stack'],
-  projects: ['projects','work','what have you built','portfolio','apps'],
-  contact: ['contact','email'],
-  phone: ['phone','number'],
-  family: ['family','father','mother'],
-  education: ['education','college','study','semester'],
-  goals: ['goal','future','aspiration']
+    greeting: ['hello','hi','hey','namaste'],
+    about: ['who is aryansh','about you','about aryansh','tell me about you','who are you'],
+    skills: ['skills','programming','languages','what do you know','stack','tech'],
+    projects: ['projects','work','what have you built','portfolio','apps'],
+    sih: ['sih', 'smart india hackathon', 'hackathon', 'nashaprahari', 'drug testing', 'field testing'],
+    dsa: ['dsa', 'leetcode', 'algorithms', 'data structures', 'problem solving', 'cpp-practice'],
+    contact: ['contact','email'],
+    phone: ['phone','number'],
+    family: ['family','father','mother'],
+    education: ['education','college','study','semester'],
+    goals: ['goal','future','aspiration']
   };
 
   // ✅ ANSWERS
   const ANSWERS = {
-    greeting: "Hey 👋 I'm Aryansh's assistant!",
-    about: "Aryansh Sharma is a Computer Science Engineering student (3rd Sem) at SSIPMT, CSVTU. He builds verified full-stack architectures, AI pipelines, and cryptographic integrity tools.",
-    skills: "C++, Python, Java, TypeScript, Solidity, C, Spring Boot, FastAPI, MySQL, React, and Data Structures & Algorithms.",
-    projects: "Flagship projects: PrepPath AI (AI readiness platform), ProofChain (decentralized doc verification), Smart Attendance (Spring Boot + MySQL), and Portfolio Website. Check the Projects section below!",
+    greeting: "Hey 👋 I'm Aryansh's AI assistant!",
+    about: "Aryansh Sharma is a 3rd-Semester B.Tech CSE student at SSIPMT Raipur (CSVTU). He is actively architecting NashaPrahari for Smart India Hackathon (SIH 2026), solving algorithmic challenges on LeetCode with automated CI sync, and building robust full-stack applications.",
+    skills: "Modern C++, TypeScript, React 19, Java 17 (Spring Boot 3), Python (FastAPI), C, SQL, Solidity, Motion, and advanced Data Structures & Algorithms.",
+    projects: "Flagship projects include: 1) NashaPrahari (SIH 2026 offline-first field drug testing companion), 2) PrepPath AI (Opportunity-to-Application readiness platform with Gemini AI & rule engine), 3) ProofChain (Ethereum Sepolia document verification), 4) Smart Attendance (Spring Boot 3 + MySQL), 5) DSA_Questions (LeetCode practice in C++ with Syncode), and 6) cpp-practice (274 programs across 20 modules).",
+    sih: "NashaPrahari is Aryansh's flagship Smart India Hackathon 2026 innovation – an offline-first digital companion for field drug testing with React 19, TypeScript, local sync queues, evidence lockers, and statutory enforcement design!",
+    dsa: "Aryansh actively solves DSA challenges on LeetCode with automated Syncode synchronization (28+ problems across Easy, Medium, and Hard including N-Queens and Number of Islands) and maintains an extensive 274-program C++ collection across 20 modules!",
     contact: `Email: ${PERSONAL_DATA.basic.email}`,
     phone: `Phone: ${PERSONAL_DATA.basic.phone}`,
     family: `Father: ${PERSONAL_DATA.family.father}, Mother: ${PERSONAL_DATA.family.mother}`,
     education: `Studying B.Tech CSE (${PERSONAL_DATA.education.year}) at ${PERSONAL_DATA.education.college}, ${PERSONAL_DATA.education.university}`,
     goals: PERSONAL_DATA.goals,
-    default: "I didn't understand that 🤔"
+    default: "I didn't understand that 🤔 Ask me about Aryansh's SIH 2026 project (NashaPrahari), skills, DSA/LeetCode progress, or background!"
   };
 
   // ✅ ADD MESSAGE
@@ -679,4 +685,7 @@ function glitchText(element) {
   }, 30);
 }
 
-glitchText(document.querySelector(".features h1"));
+const featHeading = document.querySelector(".features h1");
+if (featHeading) {
+  glitchText(featHeading);
+}
