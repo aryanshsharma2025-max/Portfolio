@@ -1,39 +1,47 @@
 # Personal Developer Portfolio
 
-An interactive, high-performance personal developer portfolio showcasing software engineering projects, academic coursework, and programming achievements. Built with semantic HTML5, modern CSS3, and vanilla JavaScript without heavy frontend framework overhead.
+[![Web Standards](https://img.shields.io/badge/Stack-HTML5%20%7C%20CSS3%20%7C%20JS-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://github.com/aryanshsharma2025-max/Portfolio)
+[![Zero Build](https://img.shields.io/badge/Architecture-Zero%20Build%20Overhead-10B981?style=for-the-badge&logo=javascript&logoColor=white)](https://github.com/aryanshsharma2025-max/Portfolio)
+[![Live Site](https://img.shields.io/badge/Deployment-GitHub%20Pages-181717?style=for-the-badge&logo=github)](https://aryanshsharma2025-max.github.io/Portfolio/)
+
+A responsive personal developer portfolio website built using native web technologies (semantic HTML5, modern CSS3, and vanilla JavaScript).
+
+Presents software engineering projects, academic milestones, and programming coursework with zero runtime libraries, build tools, or package managers.
 
 ---
 
-## 🎨 Visual Identity & Architecture
+## 📌 Features & Implementation Details
 
-- **Typography**: Paired display fonts including **Syne** (geometric sans-serif for headings), **DM Mono** (code and metadata tags), and **Instrument Serif** (editorial accents).
-- **Theme Engine**: Built-in Dark and Light mode system powered by CSS custom properties and persisted across browser sessions via `localStorage`.
-- **Micro-Interactions**: Custom trailing cursor with magnetic scaling, scroll-triggered reveal animations, dynamic count-up stat counters, and 3D perspective hover cards.
-- **Zero-Dependency Core**: Pure vanilla web standards—zero build pipelines, zero package managers, and zero runtime overhead.
-
----
-
-## 🚀 Key Features
-
-| Feature | Implementation Details |
-|---|---|
-| **Theme Toggle** | Seamless dark/light theme switching with CSS variables and `data-theme` state |
-| **Interactive Cursor** | Dual-element cursor follower with smooth interpolation and element snapping |
-| **Project Showcase** | 6 flagship projects (NashaPrahari, PrepPath AI, ProofChain, Smart Attendance, DSA Practice, Developer Portfolio) |
-| **GitHub Integration** | Dynamic fetching of public repositories and live profile metrics via GitHub REST API |
-| **AI Assistant Chatbot** | Interactive knowledge base answering questions about SIH 2026, tech stack, DSA, and background |
-| **Visitor Counter** | Client-side persistent counter tracking site engagement using browser storage |
-| **Responsive Layout** | Mobile-first layout designed with CSS Grid, Flexbox, and fluid typography clamps |
+- **Zero-Build Architecture:** Pure native web standards—opens directly in any modern browser without npm dependencies, bundlers, or transpilers.
+- **Theme Persistence:** Dark and light mode toggle engineered with CSS custom properties (`:root[data-theme]`) and state persistence in browser `localStorage`.
+- **Responsive Layout:** Fluid layout built using CSS Grid, Flexbox, and CSS math functions (`clamp()`) to adapt across mobile screens and desktop monitors.
+- **Interactive Micro-Interactions:** Custom trailing cursor with smooth coordinate interpolation, element hover snapping, and scroll-triggered animations.
+- **Dynamic GitHub Project Integration:** Client-side asynchronous `fetch()` querying public GitHub repositories to display live repository metadata.
+- **Interactive Widgets:** Client-side rule-based assistant interface and persistent engagement counter using browser storage.
 
 ---
 
-## 🛠️ Featured Showcase Projects
+## 🚦 Implementation Status
 
-1. **[NashaPrahari](https://github.com/aryanshsharma2025-max/nashaprahari)** — Offline-first digital companion for field drug testing engineered for Smart India Hackathon (SIH 2026). Built with React 19, TypeScript, Vite, Motion, and local sync queues.
-2. **[PrepPath AI](https://github.com/aryanshsharma2025-max/PrepPath-AI)** — Opportunity-to-Application readiness platform with Gemini AI and deterministic Python rule engine (35 Pytest unit & integration tests).
-3. **[ProofChain](https://github.com/aryanshsharma2025-max/ProofChain)** — Decentralized credential integrity and verification platform combining in-browser SHA-256 Web Crypto hashing and Ethereum Sepolia smart contracts.
-4. **[Smart Attendance System](https://github.com/aryanshsharma2025-max/Smart-Attendance)** — Layered Spring Boot 3 REST API with MySQL schema, hardened BOLA/IDOR protection, and multi-modal RFID/biometric simulation.
-5. **[DSA_Questions & cpp-practice](https://github.com/aryanshsharma2025-max/DSA_Questions)** — Continuous algorithmic problem solving in modern C++ with automated Syncode synchronization (28+ LeetCode problems) and 274+ verified programs across 20 modules.
+| Feature | Status | Implementation Details |
+|---|:---:|---|
+| **Semantic HTML5 Layout** | **Implemented** | Structured landmarks (`<header>`, `<main>`, `<section>`, `<footer>`) |
+| **Dark / Light Theme Toggle** | **Implemented** | CSS variables + `data-theme` state + `localStorage` |
+| **Interactive Trailing Cursor** | **Implemented** | Dual-element cursor follower with smooth interpolation |
+| **GitHub API Project Sync** | **Implemented** | Client-side `fetch()` querying public GitHub repositories |
+| **Zero-Build Core** | **Implemented** | Pure native web standards with zero dependencies |
+| **Local HTTP Serving** | **Implemented** | Runs cleanly via Python HTTP server (`http.server`) |
+| **GitHub Pages Deployment** | **Configured** | Published from `main` branch root at [aryanshsharma2025-max.github.io/Portfolio](https://aryanshsharma2025-max.github.io/Portfolio/) |
+| **Server-Side Analytics** | **Not Implemented** | Counters operate in client-side `localStorage`, not backend analytics |
+
+---
+
+## 🛠️ Technology Stack
+
+- **Markup:** HTML5 (Semantic elements)
+- **Styling:** CSS3 (Variables, Grid, Flexbox, Keyframes, Viewport clamps)
+- **Scripting:** Vanilla JavaScript (ES6+, DOM API, Fetch API, LocalStorage)
+- **Typography:** Display fonts (Syne, DM Mono, Instrument Serif) via Google Fonts
 
 ---
 
@@ -41,47 +49,55 @@ An interactive, high-performance personal developer portfolio showcasing softwar
 
 ```
 Portfolio/
-├── index.html          # Semantic HTML5 layout, hero, timeline, skills, and projects
-├── style.css           # Design tokens, CSS variables, dark/light themes, animations
-├── script.js           # DOM manipulation, typing effect, chatbot, GitHub API
-├── features.html       # Feature preview showcase
-├── images/             # Visual assets, avatars, and project previews
-├── games/              # Interactive browser mini-games
-└── README.md           # Project documentation
+├── index.html     # Main portfolio webpage
+├── style.css      # Design tokens, themes, layout, and animations
+├── script.js      # Theme toggle, cursor effect, GitHub API fetch logic
+├── features.html  # Feature preview page
+├── images/        # Project banners and visual assets
+├── games/         # Lightweight browser mini-games
+└── README.md      # Project documentation
 ```
 
 ---
 
 ## 💻 Running Locally
 
-Because this project is built entirely on native web standards, no compilation or bundler is required:
+Because the project relies entirely on native browser standards, no compilation or build step is required:
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/aryanshsharma2025-max/Portfolio.git
-   cd Portfolio
-   ```
+### Option 1: Direct File Open
+Double-click `index.html` or open it directly in any modern browser (Chrome, Edge, Firefox, Safari).
 
-2. **Open in browser**:
-   - Double-click `index.html` to open directly in any modern web browser (Chrome, Firefox, Safari, Edge).
-   - Alternatively, serve locally using Python:
-     ```bash
-     python -m http.server 3000
-     ```
-     Navigate to `http://localhost:3000`.
+### Option 2: Local HTTP Server (Recommended)
+To ensure relative assets and `fetch()` requests resolve without local file origin restrictions:
 
----
+```bash
+# Clone the repository:
+git clone https://github.com/aryanshsharma2025-max/Portfolio.git
+cd Portfolio
 
-## 🌐 Deployment (GitHub Pages)
-
-To publish via GitHub Pages:
-1. Navigate to **Settings** → **Pages** in the repository.
-2. Under **Build and deployment**, select **Deploy from a branch**.
-3. Set the branch to `main` and folder to `/ (root)`.
-4. Click **Save**. The site will deploy at `https://aryanshsharma2025-max.github.io/Portfolio/`.
+# Start a lightweight Python web server:
+python -m http.server 3000
+```
+Navigate to `http://localhost:3000` in your web browser.
 
 ---
 
-## 📄 License & Attribution
+## 🌐 Live Deployment
 
-Designed and developed by **Aryansh Sharma**. Released under the MIT License.
+- **GitHub Pages:** [https://aryanshsharma2025-max.github.io/Portfolio/](https://aryanshsharma2025-max.github.io/Portfolio/)  
+*(Configured from the repository `main` branch root)*
+
+---
+
+## ⚠️ Notes on Feature Scope & Boundaries
+
+- **Pure Client-Side Implementation:** All interactions (including theme memory and interactive widgets) execute strictly in the client's browser without a backend database or server-side analytics.
+- **Standalone Auxiliary Scripts:** The repository contains two standalone Python scripts (`chatbot.py` and `student_calc.py`) created as early Python programming exercises; these operate separately from the web interface.
+
+---
+
+## 🎯 Learning Outcomes
+
+- Writing clean, accessible semantic HTML5 documents.
+- Architecting responsive CSS with design tokens, CSS custom properties, and fluid typography clamps without UI frameworks.
+- Handling vanilla JavaScript DOM events, state persistence with `localStorage`, and asynchronous data fetching.
